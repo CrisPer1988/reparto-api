@@ -12,10 +12,10 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 app.use(cors());
 
-const userRouter = require("./src/routes/users.routes");
-const commerceRouter = require("./src/routes/commerce.routes");
-const productRouter = require("./src/routes/products.routes");
-const OrderRouter = require("./src/routes/orders.routes");
+const userRouter = require("./routes/users.routes");
+const commerceRouter = require("./routes/commerce.routes");
+const productRouter = require("./routes/products.routes");
+const OrderRouter = require("./routes/orders.routes");
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/commerces", commerceRouter);
