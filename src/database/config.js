@@ -7,10 +7,10 @@ const db = new Sequelize({
   // password: process.env.DB_PASSWORD,
   // database: process.env.DB_DATABASE,
   dialect: process.env.DB_DIALECT,
-  host: process.env.POSTGRES_HOST,
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DATABASE,
+  host: process.env.POSTGRES_DB__HOST,
+  username: process.env.POSTGRES_DB__USER,
+  password: process.env.POSTGRES_DB__PASSWORD,
+  database: process.env.POSTGRES_DB__DATABASE,
   logging: false,
   // con esto consegui conectar db postgres de azure
   dialectOptions: {
