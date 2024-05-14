@@ -13,7 +13,7 @@ db.authenticate()
 initModel();
 
 db.sync()
-  .then(() => console.log("Sync"))
+  .then(() => console.log("database Sync"))
   .catch((err) => console.log(err));
 
 app.listen(port, () => {
