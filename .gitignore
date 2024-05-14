@@ -41,3 +41,4 @@ client/.expo-shared/
 
 # Turtle
 client/turtle-build/
+.vercel
