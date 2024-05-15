@@ -133,11 +133,14 @@ exports.getOneOrder = async (req, res) => {
 };
 
 function generateOrderPDF(order) {
+  console.log("ENTRE");
   const formattedDate = moment(order.createdAt).format("LL");
 
   const doc = new PDFDocument();
   const filename = `order_${order.id}.pdf`;
   const outputStream = fs.createWriteStream(`./downloads/${filename}`);
+
+  console.log("FILE", outputStream);
 
   doc.pipe(outputStream);
 
@@ -177,6 +180,8 @@ function generateOrderPDF(order) {
   doc.fontSize(16).text(`Total: ${totalPrice}`, { align: "right" });
 
   doc.end();
+
+  console.log("FILENAME", filename);
 
   return filename;
 }

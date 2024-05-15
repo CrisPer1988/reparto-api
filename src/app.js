@@ -21,6 +21,6 @@ app.use("/users", userRouter);
 app.use("/commerces", commerceRouter);
 app.use("/products", productRouter);
 app.use("/orders", OrderRouter);
-app.use("/downloads", express.static(path.join(__dirname, "downloads")));
+app.use("/downloads", express.static(path.join("downloads")));
 
 module.exports = app;
