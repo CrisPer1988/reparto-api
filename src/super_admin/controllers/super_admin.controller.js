@@ -1,6 +1,10 @@
-const Super_Admin = require("../models/super_admin.model");
+const Super_Admin = require("../model/super_admin.model");
 const bcrypt = require("bcryptjs");
-const generateJWT = require("../utils/jwt");
+const generateJWT = require("../../utils/jwt");
+const Admin = require("../../admin/model/admin.model");
+const Seller = require("../../sellers/model/sellers.model");
+const Delivery_man = require("../../delivery_man/model/delivery_man.model");
+const { createFunction } = require("../../utils/create.function");
 
 exports.createSuperAdmin = async (req, res) => {
   try {
@@ -20,7 +24,11 @@ exports.createSuperAdmin = async (req, res) => {
       status: "Success",
       superAdmin,
     });
-  } catch (error) {}
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
 };
 
 exports.loginSuperAdmin = async (req, res) => {
@@ -53,6 +61,51 @@ exports.loginSuperAdmin = async (req, res) => {
         lastname: superAdmin.lastname,
         email: superAdmin.email,
       },
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
+};
+
+exports.createAdmin = async (req, res) => {
+  try {
+    const admin = await createFunction(req.body, Admin);
+
+    return res.status(201).json({
+      status: "Success",
+      admin,
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
+};
+
+exports.createSeller = async (req, res) => {
+  try {
+    const seller = await createFunction(req.body, Seller);
+
+    return res.status(201).json({
+      status: "Success",
+      seller,
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
+};
+
+exports.createDeliveryMan = async (req, res) => {
+  try {
+    const delevery = await createFunction(req.body, Delivery_man);
+
+    return res.status(201).json({
+      status: "Success",
+      delevery,
     });
   } catch (error) {
     res.json({

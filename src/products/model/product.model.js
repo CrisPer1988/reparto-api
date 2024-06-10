@@ -1,28 +1,25 @@
 const { DataTypes } = require("sequelize");
-const { db } = require("../database/config");
+const { db } = require("../../database/config");
 
-const Super_Admin = db.define("super_admins", {
+const Product = db.define("products", {
   id: {
     primaryKey: true,
     type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
   },
-  firstname: {
+  id: {
+    primaryKey: true,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  lastname: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
+  price: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   status: {
@@ -32,4 +29,4 @@ const Super_Admin = db.define("super_admins", {
   },
 });
 
-module.exports = Super_Admin;
+module.exports = Product;

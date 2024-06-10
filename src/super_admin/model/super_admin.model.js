@@ -1,39 +1,35 @@
 const { DataTypes } = require("sequelize");
-const { db } = require("../database/config");
+const { db } = require("../../database/config");
 
-const User = db.define("users", {
+const Super_Admin = db.define("super_admins", {
   id: {
     primaryKey: true,
     type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
   },
-  first_name: {
+  firstname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  last_name: {
+  lastname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
+    unique: true,
     allowNull: false,
   },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  role: {
-    type: DataTypes.ENUM("admin", "employee"),
-    defaultValue: "employee",
-    allowNull: false,
-  },
   status: {
-    type: DataTypes.ENUM("active", "disable"),
+    type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",
     allowNull: false,
   },
 });
 
-module.exports = User;
+module.exports = Super_Admin;

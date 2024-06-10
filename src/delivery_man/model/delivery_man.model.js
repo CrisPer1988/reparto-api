@@ -1,24 +1,29 @@
 const { DataTypes } = require("sequelize");
-const { db } = require("../database/config");
+const { db } = require("../../database/config");
 
-const Order = db.define("orders", {
+const Delivery_man = db.define("deliveries_man", {
   id: {
     primaryKey: true,
     type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
   },
-  user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  commerce_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  other: {
+  firstname: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
+  },
+  lastname: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   status: {
     type: DataTypes.ENUM("active", "disabled"),
@@ -27,4 +32,4 @@ const Order = db.define("orders", {
   },
 });
 
-module.exports = Order;
+module.exports = Delivery_man;

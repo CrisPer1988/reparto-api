@@ -1,33 +1,30 @@
 const { DataTypes } = require("sequelize");
-const { db } = require("../database/config");
+const { db } = require("../../database/config");
 
-const OrderDetails = db.define("ordersDetails", {
+const Admin = db.define("admins", {
   id: {
     primaryKey: true,
     type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
   },
-  order_id: {
-    type: DataTypes.INTEGER,
+  firstname: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  product_id: {
-    type: DataTypes.INTEGER,
+  lastname: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  total_price: {
-    type: DataTypes.INTEGER,
+  email: {
+    type: DataTypes.STRING,
+    unique: true,
     allowNull: false,
   },
-  quantity: {
-    type: DataTypes.INTEGER,
+  password: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  // other: {
-  //   type: DataTypes.STRING,
-  //   allowNull: true,
-  // },
   status: {
     type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",
@@ -35,4 +32,4 @@ const OrderDetails = db.define("ordersDetails", {
   },
 });
 
-module.exports = OrderDetails;
+module.exports = Admin;

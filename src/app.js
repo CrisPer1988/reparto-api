@@ -12,17 +12,17 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 app.use(cors());
 
-const userRouter = require("./routes/users.routes");
-const commerceRouter = require("./routes/commerce.routes");
-const productRouter = require("./routes/products.routes");
-const orderRouter = require("./routes/orders.routes");
-const superAdminRouter = require("./routes/super_admin.routes");
+// const userRouter = require("./routes/users.routes");
+// const commerceRouter = require("./routes/commerce.routes");
+// const productRouter = require("./routes/products.routes");
+// const orderRouter = require("./routes/orders.routes");
+const superAdminRouter = require("./super_admin/routes/super_admin.routes");
 
-app.use("/users", userRouter);
+// app.use("/users", userRouter);
 app.use("/super", superAdminRouter);
-app.use("/commerces", commerceRouter);
-app.use("/products", productRouter);
-app.use("/orders", orderRouter);
-app.use("/downloads", express.static(path.join("downloads")));
+// app.use("/commerces", commerceRouter);
+// app.use("/products", productRouter);
+// app.use("/orders", orderRouter);
+// app.use("/downloads", express.static(path.join("downloads")));
 
 module.exports = app;

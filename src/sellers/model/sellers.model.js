@@ -1,22 +1,27 @@
 const { DataTypes } = require("sequelize");
-const { db } = require("../database/config");
+const { db } = require("../../database/config");
 
-const Commerce = db.define("commerces", {
+const Seller = db.define("sellers", {
   id: {
     primaryKey: true,
     type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
   },
-  name: {
+  firstname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  address: {
+  lastname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  phone: {
+  email: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+  },
+  password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -27,4 +32,4 @@ const Commerce = db.define("commerces", {
   },
 });
 
-module.exports = Commerce;
+module.exports = Seller;
