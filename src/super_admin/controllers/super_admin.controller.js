@@ -69,9 +69,22 @@ exports.loginSuperAdmin = async (req, res) => {
   }
 };
 
+exports.findSuperAdmin = async (req, res) => {
+  try {
+    console.log("ENTREEEE");
+    const { superAdmin } = req;
+
+    return res.status(200).json({
+      status: "Succes",
+      superAdmin,
+    });
+  } catch (error) {}
+};
+
 exports.createAdmin = async (req, res) => {
   try {
-    const admin = await createFunction(req.body, Admin);
+    const { superAdmin } = req;
+    const admin = await createFunction(req.body, Admin, superAdmin.id);
 
     return res.status(201).json({
       status: "Success",
@@ -86,7 +99,8 @@ exports.createAdmin = async (req, res) => {
 
 exports.createSeller = async (req, res) => {
   try {
-    const seller = await createFunction(req.body, Seller);
+    const { superAdmin } = req;
+    const seller = await createFunction(req.body, Seller, superAdmin.id);
 
     return res.status(201).json({
       status: "Success",
@@ -101,7 +115,12 @@ exports.createSeller = async (req, res) => {
 
 exports.createDeliveryMan = async (req, res) => {
   try {
-    const delevery = await createFunction(req.body, Delivery_man);
+    const { superAdmin } = req;
+    const delevery = await createFunction(
+      req.body,
+      Delivery_man,
+      superAdmin.id
+    );
 
     return res.status(201).json({
       status: "Success",

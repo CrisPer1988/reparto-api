@@ -10,7 +10,7 @@ db.authenticate()
   .then(() => console.log("Database Autenticate"))
   .catch((err) => console.log(err));
 
-// relations();
+relations();
 
 db.sync()
   .then(() => console.log("database Sync"))

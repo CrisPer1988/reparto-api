@@ -1,18 +1,20 @@
-// const Commerce = require("./commerce.model");
-// const Order = require("./order.model");
-// const OrderDetails = require("./orderDetails.model");
-// const Product = require("./product.model");
-// const User = require("./users.model");
+const Super_Admin = require("../super_admin/model/super_admin.model");
+const Admin = require("../admin/model/admin.model");
+const Seller = require("../sellers/model/sellers.model");
+const Delivery_man = require("../delivery_man/model/delivery_man.model");
 
 const relations = () => {
-  // Order.hasMany(OrderDetails, { foreignKey: "order_id" });
-  // OrderDetails.belongsTo(Order, { foreignKey: "order_id" });
-  // Commerce.hasMany(Order, { foreignKey: "commerce_id" });
-  // Order.belongsTo(Commerce, { foreignKey: "commerce_id" });
-  // Product.hasMany(OrderDetails, { foreignKey: "product_id" });
-  // OrderDetails.belongsTo(Product, { foreignKey: "product_id" });
-  // User.hasMany(Order, { foreignKey: "user_id" });
-  // Order.belongsTo(User, { foreignKey: "user_id" });
+  // superAdmin => admins
+  Super_Admin.hasMany(Admin, { foreignKey: "super_admin_id" });
+  Admin.belongsTo(Super_Admin, { foreignKey: "super_admin_id" });
+
+  // superAdmin => sellers
+  Super_Admin.hasMany(Seller, { foreignKey: "super_admin_id" });
+  Seller.belongsTo(Super_Admin, { foreignKey: "super_admin_id" });
+
+  // superAdmin => deleveries_men
+  Super_Admin.hasMany(Delivery_man, { foreignKey: "super_admin_id" });
+  Delivery_man.belongsTo(Super_Admin, { foreignKey: "super_admin_id" });
 };
 
 module.exports = relations;

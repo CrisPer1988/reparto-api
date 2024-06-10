@@ -4,8 +4,8 @@ const { db } = require("../../database/config");
 const Delivery_man = db.define("deliveries_man", {
   id: {
     primaryKey: true,
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
   firstname: {
@@ -23,6 +23,10 @@ const Delivery_man = db.define("deliveries_man", {
   },
   password: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  super_admin_id: {
+    type: DataTypes.UUID,
     allowNull: false,
   },
   status: {

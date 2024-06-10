@@ -4,8 +4,8 @@ const { db } = require("../../database/config");
 const Product = db.define("products", {
   id: {
     primaryKey: true,
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
   id: {
