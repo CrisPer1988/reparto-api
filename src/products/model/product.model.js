@@ -18,8 +18,16 @@ const Product = db.define("products", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   price: {
     type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  super_admin_id: {
+    type: DataTypes.UUID,
     allowNull: false,
   },
   status: {

@@ -5,6 +5,8 @@ const Admin = require("../../admin/model/admin.model");
 const Seller = require("../../sellers/model/sellers.model");
 const Delivery_man = require("../../delivery_man/model/delivery_man.model");
 const { createFunction } = require("../../utils/create.function");
+const { uploadImage } = require("../../utils/uploadImage");
+const Product = require("../../products/model/product.model");
 
 exports.createSuperAdmin = async (req, res) => {
   try {
@@ -125,6 +127,36 @@ exports.createDeliveryMan = async (req, res) => {
     return res.status(201).json({
       status: "Success",
       delevery,
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
+};
+
+exports.createProduct = async (req, res) => {
+  try {
+    const { superAdmin } = req;
+    const { name, price } = req.body;
+
+    if (!req.file) {
+      throw new Error("Image file is required");
+    }
+
+    const imageFile = req.file;
+
+    const imageUrl = await uploadImage(imageFile);
+
+    const product = await Product.create({
+      name,
+      image: imageUrl,
+      price,
+      super_admin_id: superAdmin.id,
+    });
+    return res.status(201).json({
+      status: "Success",
+      product,
     });
   } catch (error) {
     res.json({
