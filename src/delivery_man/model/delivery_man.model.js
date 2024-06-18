@@ -25,7 +25,7 @@ const Delivery_man = db.define("deliveries_man", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  super_admin_id: {
+  distributor_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },

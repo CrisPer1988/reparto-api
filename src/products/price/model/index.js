@@ -1,31 +1,22 @@
 const { DataTypes } = require("sequelize");
-const { db } = require("../../database/config");
+const { db } = require("../../../database/config");
 
-const Seller = db.define("sellers", {
+const Price = db.define("prices", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
-  firstname: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  lastname: {
-    type: DataTypes.STRING,
+  price: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
-  email: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  distributor_id: {
+  product_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },
@@ -36,4 +27,4 @@ const Seller = db.define("sellers", {
   },
 });
 
-module.exports = Seller;
+module.exports = Price;

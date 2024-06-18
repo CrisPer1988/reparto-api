@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { db } = require("../../database/config");
 
-const Seller = db.define("sellers", {
+const Owner = db.define("owners", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
@@ -25,10 +25,6 @@ const Seller = db.define("sellers", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  distributor_id: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
   status: {
     type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",
@@ -36,4 +32,4 @@ const Seller = db.define("sellers", {
   },
 });
 
-module.exports = Seller;
+module.exports = Owner;

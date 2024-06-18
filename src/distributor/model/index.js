@@ -1,18 +1,18 @@
 const { DataTypes } = require("sequelize");
 const { db } = require("../../database/config");
 
-const Super_Admin = db.define("super_admins", {
+const Distributor = db.define("distributors", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
-  firstname: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  lastname: {
+  address: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -21,8 +21,17 @@ const Super_Admin = db.define("super_admins", {
     unique: true,
     allowNull: false,
   },
+  phone: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+  },
   password: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  owner_id: {
+    type: DataTypes.UUID,
     allowNull: false,
   },
   status: {
@@ -32,4 +41,4 @@ const Super_Admin = db.define("super_admins", {
   },
 });
 
-module.exports = Super_Admin;
+module.exports = Distributor;
