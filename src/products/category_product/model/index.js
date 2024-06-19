@@ -12,6 +12,14 @@ const Category_Product = db.define("categories_products", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  pack: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  distributor_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
   status: {
     type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",

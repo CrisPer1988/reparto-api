@@ -16,6 +16,10 @@ const Product = db.define("products", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  stock: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
   distributor_id: {
     type: DataTypes.UUID,
     allowNull: false,
