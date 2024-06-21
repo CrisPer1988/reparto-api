@@ -17,6 +17,8 @@ const sellersRouter = require("./sellers/routes");
 const deliveriesManRouter = require("./delivery_man/routes");
 const categoriesRouter = require("./products/category_product/routes");
 const priceRouter = require("./products/price/routes");
+const zoneRouter = require("./zone/routes");
+const bonusRouter = require("./products/bonus/routes");
 
 app.use("/owner", ownerRouter);
 app.use("/distributor", distributorRouter);
@@ -25,5 +27,7 @@ app.use("/price", priceRouter);
 app.use("/products", productsRouter);
 app.use("/sellers", sellersRouter);
 app.use("/deliveries", deliveriesManRouter);
+app.use("/zone", zoneRouter);
+app.use("/bonus", bonusRouter);
 
 module.exports = app;

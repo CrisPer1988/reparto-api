@@ -1,4 +1,3 @@
-// const Admin = require("../../admin/model/admin.model");
 const Delivery_man = require("../../delivery_man/model/delivery_man.model");
 const Product = require("../../products/model/product.model");
 const Seller = require("../../sellers/model/sellers.model");
@@ -13,16 +12,11 @@ exports.validExistsDistributor = async (req, res, next) => {
         id,
         status: "active",
       },
-      include: [
-        // { model: Admin },
-        { model: Seller },
-        { model: Delivery_man },
-        { model: Product },
-      ],
+      include: [{ model: Seller }, { model: Delivery_man }, { model: Product }],
     });
 
     if (!distributor) {
-      return res.status(404).json({ message: "distributor not found" });
+      return res.status(404).json({ message: "Distributor not found" });
     }
 
     req.distributor = distributor;
