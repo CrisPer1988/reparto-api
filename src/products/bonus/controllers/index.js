@@ -1,4 +1,4 @@
-const Category_Product = require("../../category_product/model");
+// const Category_Product = require("../../category_product/model");
 const Product = require("../../model/product.model");
 const Bonus = require("../model");
 

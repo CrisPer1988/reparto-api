@@ -8,11 +8,7 @@ const Product = db.define("products", {
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  type: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -24,7 +20,7 @@ const Product = db.define("products", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  stock: {
+  pack: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },

@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { db } = require("../../../database/config");
 
-const Category_Product = db.define("categories_products", {
+const Type = db.define("types", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
@@ -12,11 +12,11 @@ const Category_Product = db.define("categories_products", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  pack: {
+  stock: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  distributor_id: {
+  product_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },
@@ -27,4 +27,4 @@ const Category_Product = db.define("categories_products", {
   },
 });
 
-module.exports = Category_Product;
+module.exports = Type;

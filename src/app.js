@@ -15,14 +15,14 @@ const distributorRouter = require("./distributor/routes");
 const productsRouter = require("./products/routes");
 const sellersRouter = require("./sellers/routes");
 const deliveriesManRouter = require("./delivery_man/routes");
-const categoriesRouter = require("./products/category_product/routes");
+// const categoriesRouter = require("./products/category_product/routes");
 const priceRouter = require("./products/price/routes");
 const zoneRouter = require("./zone/routes");
 const bonusRouter = require("./products/bonus/routes");
 
 app.use("/owner", ownerRouter);
 app.use("/distributor", distributorRouter);
-app.use("/categories", categoriesRouter);
+// app.use("/categories", categoriesRouter);
 app.use("/price", priceRouter);
 app.use("/products", productsRouter);
 app.use("/sellers", sellersRouter);
