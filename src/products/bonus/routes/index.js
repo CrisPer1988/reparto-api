@@ -1,12 +1,16 @@
 const express = require("express");
 
 const bonusControllers = require("../controllers");
-const productValidations = require("../../middlewares");
+// const categoryValidations = require("../../category_product/middlewares");
 
 const router = express.Router();
 
+router.route("/").get(bonusControllers.allBunuses);
+
 router
-  .route("/:id")
-  .post(productValidations.validExistsProduct, bonusControllers.createBonus);
+  .route("/")
+  .post(
+    /*categoryValidations.validExistsCategory,*/ bonusControllers.createBonus
+  );
 
 module.exports = router;

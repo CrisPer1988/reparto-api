@@ -8,7 +8,15 @@ const Product = db.define("products", {
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
-  name: {
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  quantity: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -20,14 +28,14 @@ const Product = db.define("products", {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
-  distributor_id: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  category_id: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
+  // distributor_id: {
+  //   type: DataTypes.UUID,
+  //   allowNull: false,
+  // },
+  // category_id: {
+  //   type: DataTypes.UUID,
+  //   allowNull: false,
+  // },
   status: {
     type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",
