@@ -1,30 +1,29 @@
 const { DataTypes } = require("sequelize");
-const { db } = require("../../../database/config");
+const { db } = require("../../database/config");
 
-const Bonus = db.define("bonuses", {
+const Product = db.define("products", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
+  flavor: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  stock: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   category_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  category_bonus_id: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  bonus_quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-
   status: {
     type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",
@@ -32,4 +31,4 @@ const Bonus = db.define("bonuses", {
   },
 });
 
-module.exports = Bonus;
+module.exports = Product;

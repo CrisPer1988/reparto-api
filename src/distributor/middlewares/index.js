@@ -1,5 +1,5 @@
 const Delivery_man = require("../../delivery_man/model/delivery_man.model");
-const Product = require("../../products/model/product.model");
+const Product = require("../../products/model");
 const Seller = require("../../sellers/model/sellers.model");
 const Distributor = require("../model");
 

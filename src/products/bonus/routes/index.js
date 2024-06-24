@@ -5,12 +5,11 @@ const bonusControllers = require("../controllers");
 
 const router = express.Router();
 
-router.route("/").get(bonusControllers.allBunuses);
-
 router
   .route("/")
   .post(
     /*categoryValidations.validExistsCategory,*/ bonusControllers.createBonus
-  );
+  )
+  .get(bonusControllers.allBunuses);
 
 module.exports = router;

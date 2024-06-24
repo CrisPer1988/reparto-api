@@ -6,7 +6,7 @@ const Seller = require("../../sellers/model/sellers.model");
 const Delivery_man = require("../../delivery_man/model/delivery_man.model");
 const { createFunction } = require("../../utils/create.function");
 const { uploadImage } = require("../../utils/uploadImage");
-const Product = require("../../products/model/product.model");
+const Product = require("../../products/model");
 const Distributor = require("../model");
 const Owner = require("../../owner/model");
 

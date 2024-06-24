@@ -1,11 +1,13 @@
 const { uploadImage } = require("../../utils/uploadImage");
-const Product = require("../model/product.model");
+const Category = require("../category/model");
+const Product = require("../model");
 const Price = require("../price/model");
 const Type = require("../type/model");
 
 exports.createProduct = async (req, res) => {
   try {
-    const { name, quantity, stock, type, pack } = req.body;
+    const { category } = req;
+    const { flavor, stock } = req.body;
 
     if (!req.file) {
       throw new Error("Image file is required");
@@ -16,22 +18,22 @@ exports.createProduct = async (req, res) => {
     const imageUrl = await uploadImage(imageFile);
 
     const product = await Product.create({
-      name,
-      quantity,
-      pack,
+      flavor,
+      stock,
       image: imageUrl,
+      category_id: category.id,
     });
 
-    const type_product = await Type.create({
-      name: type,
-      stock,
-      product_id: product.id,
-    });
+    // const type_product = await Type.create({
+    //   name: type,
+    //   stock,
+    //   product_id: product.id,
+    // });
 
     return res.status(201).json({
       status: "Success",
       product,
-      type_product,
+      // type_product,
     });
   } catch (error) {
     res.json({
@@ -44,7 +46,7 @@ exports.allProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
       where: { status: "active" },
-      include: [{ model: Type }, { model: Price }],
+      include: [{ model: Category }, { model: Price }],
     });
 
     return res.status(200).json({
