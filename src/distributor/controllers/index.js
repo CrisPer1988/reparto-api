@@ -56,12 +56,12 @@ exports.loginDistributor = async (req, res) => {
         email: email.toLowerCase(),
         status: "active",
       },
-      include: [
-        { model: Owner },
-        { model: Seller },
-        { model: Delivery_man },
-        { model: Product },
-      ],
+      // include: [
+      //   { model: Owner },
+      //   { model: Seller },
+      //   { model: Delivery_man },
+      //   { model: Product },
+      // ],
     });
 
     if (!distributor) {
