@@ -3,9 +3,9 @@ const Seller = require("../model/sellers.model");
 
 exports.createSeller = async (req, res) => {
   try {
-    const { distributor } = req;
+    // const { distributor } = req;
 
-    const seller = await createFunction(req.body, Seller, distributor.id);
+    const seller = await createFunction(req.body, Seller);
 
     return res.status(201).json({
       status: "Success",

@@ -2,7 +2,6 @@ const { uploadImage } = require("../../utils/uploadImage");
 const Category = require("../category/model");
 const Product = require("../model");
 const Price = require("../price/model");
-const Type = require("../type/model");
 
 exports.createProduct = async (req, res) => {
   try {
@@ -24,16 +23,9 @@ exports.createProduct = async (req, res) => {
       category_id: category.id,
     });
 
-    // const type_product = await Type.create({
-    //   name: type,
-    //   stock,
-    //   product_id: product.id,
-    // });
-
     return res.status(201).json({
       status: "Success",
       product,
-      // type_product,
     });
   } catch (error) {
     res.json({

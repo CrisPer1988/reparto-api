@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 
-exports.createFunction = async (body, Model, distributor_id) => {
+exports.createFunction = async (body, Model) => {
   const { firstname, lastname, email, password } = body;
 
   const salt = await bcrypt.genSalt(10);
@@ -11,7 +11,6 @@ exports.createFunction = async (body, Model, distributor_id) => {
     lastname,
     email,
     password: encryptedPassword,
-    distributor_id,
   });
 
   return deliveryMan;

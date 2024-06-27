@@ -7,7 +7,6 @@ const Owner = require("../owner/model");
 // const Category_Product = require("../products/type/model");
 const Price = require("../products/price/model");
 const Bonus = require("../products/bonus/model");
-const Type = require("../products/type/model");
 const Category = require("../products/category/model");
 
 const relations = () => {
@@ -16,16 +15,16 @@ const relations = () => {
   Distributor.belongsTo(Owner, { foreignKey: "owner_id" });
 
   // superAdmin => sellers
-  Distributor.hasMany(Seller, { foreignKey: "distributor_id" });
-  Seller.belongsTo(Distributor, { foreignKey: "distributor_id" });
+  // Distributor.hasMany(Seller, { foreignKey: "distributor_id" });
+  // Seller.belongsTo(Distributor, { foreignKey: "distributor_id" });
 
   // superAdmin => deleveries_men
-  Distributor.hasMany(Delivery_man, { foreignKey: "distributor_id" });
-  Delivery_man.belongsTo(Distributor, { foreignKey: "distributor_id" });
+  // Distributor.hasMany(Delivery_man, { foreignKey: "distributor_id" });
+  // Delivery_man.belongsTo(Distributor, { foreignKey: "distributor_id" });
 
   // superAdmin => products
-  Distributor.hasMany(Product, { foreignKey: "distributor_id" });
-  Product.belongsTo(Distributor, { foreignKey: "distributor_id" });
+  // Distributor.hasMany(Product, { foreignKey: "distributor_id" });
+  // Product.belongsTo(Distributor, { foreignKey: "distributor_id" });
 
   //product => price
   Product.hasMany(Price, { foreignKey: "product_id" });

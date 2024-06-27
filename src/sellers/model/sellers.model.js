@@ -25,10 +25,6 @@ const Seller = db.define("sellers", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  distributor_id: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
   status: {
     type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",

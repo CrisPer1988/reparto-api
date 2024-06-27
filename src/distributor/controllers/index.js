@@ -18,12 +18,21 @@ exports.createDistributor = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const encryptedPassword = await bcrypt.hash(password, salt);
 
+    if (!req.file) {
+      throw new Error("Image file is required");
+    }
+
+    const imageFile = req.file;
+
+    const imageUrl = await uploadImage(imageFile);
+
     const distributor = await Distributor.create({
       name,
       address,
       email,
       phone,
       password: encryptedPassword,
+      image: imageUrl,
       owner_id: owner.id,
     });
 

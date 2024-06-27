@@ -30,6 +30,10 @@ const Distributor = db.define("distributors", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   owner_id: {
     type: DataTypes.UUID,
     allowNull: false,
