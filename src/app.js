@@ -19,6 +19,7 @@ const categoriesRouter = require("./products/category/routes");
 const priceRouter = require("./products/price/routes");
 const zoneRouter = require("./zone/routes");
 const bonusRouter = require("./products/bonus/routes");
+const commercesRouter = require("./commerce/routes");
 
 app.use("/owner", ownerRouter);
 app.use("/distributor", distributorRouter);
@@ -29,5 +30,7 @@ app.use("/sellers", sellersRouter);
 app.use("/deliveries", deliveriesManRouter);
 app.use("/zone", zoneRouter);
 app.use("/bonus", bonusRouter);
+app.use("/bonus", bonusRouter);
+app.use("/commerces", commercesRouter);
 
 module.exports = app;

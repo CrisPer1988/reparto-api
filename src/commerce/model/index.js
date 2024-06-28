@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { db } = require("../../database/config");
 
-const Zone = db.define("zones", {
+const Commerce = db.define("commerces", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
@@ -12,14 +12,18 @@ const Zone = db.define("zones", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  seller_id: {
+  address: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  zone_id: {
     type: DataTypes.UUID,
     allowNull: true,
   },
-  // delivery_man_id: {
-  //   type: DataTypes.UUID,
-  //   allowNull: true,
-  // },
   status: {
     type: DataTypes.ENUM("active", "disabled"),
     defaultValue: "active",
@@ -27,4 +31,4 @@ const Zone = db.define("zones", {
   },
 });
 
-module.exports = Zone;
+module.exports = Commerce;

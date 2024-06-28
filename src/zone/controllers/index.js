@@ -2,18 +2,22 @@ const Zone = require("../model");
 
 exports.createZone = async (req, res) => {
   try {
-    const { name, seller_id, delivery_man_id } = req.body;
+    const { name, seller_id } = req.body;
 
-    const zone = await Zone.create({
-      name,
-      seller_id,
-      delivery_man_id,
-    });
+    const findZone = await Zone.findOne({ where: { name, status: "active" } });
 
-    return res.status(201).json({
-      status: "Success",
-      zone,
-    });
+    if (findZone) {
+      res.status(404).json({ message: "Zone exists" });
+    } else {
+      const zone = await Zone.create({
+        name,
+        seller_id,
+      });
+      return res.status(201).json({
+        status: "Success",
+        zone,
+      });
+    }
   } catch (error) {
     res
       .status(500)

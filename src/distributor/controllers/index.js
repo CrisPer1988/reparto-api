@@ -9,6 +9,7 @@ const { uploadImage } = require("../../utils/uploadImage");
 const Product = require("../../products/model");
 const Distributor = require("../model");
 const Owner = require("../../owner/model");
+const { loginFunction } = require("../../utils/loginFunction");
 
 exports.createDistributor = async (req, res) => {
   try {
@@ -49,39 +50,26 @@ exports.createDistributor = async (req, res) => {
 
 exports.loginDistributor = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const response = await loginFunction(req.body, Distributor);
 
-    const distributor = await Distributor.findOne({
-      where: {
-        email: email.toLowerCase(),
-        status: "active",
-      },
-      // include: [
-      //   { model: Owner },
-      //   { model: Seller },
-      //   { model: Delivery_man },
-      //   { model: Product },
-      // ],
-    });
-
-    if (!distributor) {
-      return res.json({ message: "Distributor could not be found" });
+    if (response.error) {
+      return res.status(400).json({
+        status: "Error",
+        message: response.message,
+      });
     }
 
-    if (!(await bcrypt.compare(password, distributor.password))) {
-      return res.json({ message: "Incorrect email or password" });
-    }
+    const { user, token } = response;
 
-    const token = await generateJWT(distributor.id);
-
-    return res.status(200).json({
-      status: "success",
-      token,
-      distributor,
+    return res.status(201).json({
+      status: "Success",
+      distributor: user,
+      token: token,
     });
   } catch (error) {
-    res.json({
-      message: error,
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
     });
   }
 };
@@ -94,7 +82,12 @@ exports.findDistributor = async (req, res) => {
       status: "Succes",
       distributor,
     });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
 };
 
 exports.createAdmin = async (req, res) => {

@@ -4,9 +4,8 @@ const controllers = require("../controllers");
 const validationsDistributor = require("../../distributor/middlewares");
 const router = express.Router();
 
-router.route("/").post(
-  // validationsDistributor.validExistsDistributor,
-  controllers.createSeller
-);
+router.route("/").post(controllers.createSeller);
+
+router.route("/login").post(controllers.loginSeller);
 
 module.exports = router;
