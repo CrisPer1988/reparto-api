@@ -4,8 +4,6 @@ const Seller = require("../model/sellers.model");
 
 exports.createSeller = async (req, res) => {
   try {
-    // const { distributor } = req;
-
     const seller = await createFunction(req.body, Seller);
 
     return res.status(201).json({
@@ -36,6 +34,22 @@ exports.loginSeller = async (req, res) => {
       status: "Success",
       seller: user,
       token: token,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+
+exports.allSeller = async (req, res) => {
+  try {
+    const sellers = await Seller.findAll();
+
+    return res.status(200).json({
+      status: "Success",
+      sellers,
     });
   } catch (error) {
     return res.status(500).json({

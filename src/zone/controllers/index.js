@@ -4,6 +4,8 @@ exports.createZone = async (req, res) => {
   try {
     const { name, seller_id } = req.body;
 
+    console.log(req.body);
+
     const findZone = await Zone.findOne({ where: { name, status: "active" } });
 
     if (findZone) {
@@ -18,6 +20,21 @@ exports.createZone = async (req, res) => {
         zone,
       });
     }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+exports.allZones = async (req, res) => {
+  try {
+    const zones = await Zone.findAll({ where: { status: "active" } });
+
+    return res.status(200).json({
+      status: "Success",
+      zones,
+    });
   } catch (error) {
     res
       .status(500)

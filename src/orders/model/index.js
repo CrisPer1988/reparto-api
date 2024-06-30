@@ -1,26 +1,30 @@
 const { DataTypes } = require("sequelize");
 const { db } = require("../../database/config");
 
-const Zone = db.define("zones", {
+const Order = db.define("orders", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   seller_id: {
     type: DataTypes.UUID,
-    allowNull: true,
+    allowNull: false,
+  },
+  zone_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+  commerce_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM("active", "disabled"),
-    defaultValue: "active",
+    type: DataTypes.ENUM("pending", "rejected", "completed"),
+    defaultValue: "pending",
     allowNull: false,
   },
 });
 
-module.exports = Zone;
+module.exports = Order;

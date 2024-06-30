@@ -1,13 +1,13 @@
 const express = require("express");
 
-const zoneControllers = require("../controllers");
+const controllers = require("../controllers");
 const zoneValidations = require("../middlewares");
 const router = express.Router();
 
-router.route("/").post(zoneControllers.createZone);
+router.route("/").post(controllers.createZone).get(controllers.allZones);
 
 router
   .route("/:id")
-  .patch(zoneValidations.validExistsZone, zoneControllers.updateZone);
+  .patch(zoneValidations.validExistsZone, controllers.updateZone);
 
 module.exports = router;
