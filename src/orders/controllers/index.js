@@ -1,11 +1,10 @@
 const Order = require("../model");
+const Order_Details = require("../order_details/model");
 
 exports.createOrder = async (req, res) => {
   try {
     const { commerce } = req;
     const { seller_id, zone_id } = req.body;
-
-    console.log("NTREEE", commerce);
 
     if (seller_id && zone_id) {
       const order = await Order.create({
@@ -24,4 +23,19 @@ exports.createOrder = async (req, res) => {
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
+};
+
+exports.allOrdersByZone = async (req, res) => {
+  const { zone } = req;
+
+  const orders = await Order.findAll({
+    where: {
+      zone_id: zone.id,
+    },
+    include: [{ model: Order_Details }],
+  });
+
+  return res.json({
+    orders,
+  });
 };

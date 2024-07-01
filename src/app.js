@@ -21,6 +21,7 @@ const zoneRouter = require("./zone/routes");
 const bonusRouter = require("./products/bonus/routes");
 const commercesRouter = require("./commerce/routes");
 const ordersRouter = require("./orders/routes");
+const ordersDetailsRouter = require("./orders/order_details/routes");
 
 app.use("/owner", ownerRouter);
 app.use("/distributor", distributorRouter);
@@ -34,5 +35,6 @@ app.use("/bonus", bonusRouter);
 app.use("/bonus", bonusRouter);
 app.use("/commerces", commercesRouter);
 app.use("/orders", ordersRouter);
+app.use("/order-details", ordersDetailsRouter);
 
 module.exports = app;
