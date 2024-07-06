@@ -1,4 +1,5 @@
 const Zone = require("../model");
+const Seller = require("../../sellers/model/sellers.model");
 
 exports.createZone = async (req, res) => {
   try {
@@ -29,7 +30,30 @@ exports.createZone = async (req, res) => {
 
 exports.allZones = async (req, res) => {
   try {
-    const zones = await Zone.findAll({ where: { status: "active" } });
+    const zones = await Zone.findAll({
+      where: { status: "active" },
+      include: [{ model: Seller }],
+    });
+
+    return res.status(200).json({
+      status: "Success",
+      zones,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+exports.allZonesBySeller = async (req, res) => {
+  try {
+    const { seller } = req;
+
+    const zones = await Zone.findAll({
+      where: { status: "active", seller_id: seller.id },
+      // include: [{ model: Seller }],
+    });
 
     return res.status(200).json({
       status: "Success",

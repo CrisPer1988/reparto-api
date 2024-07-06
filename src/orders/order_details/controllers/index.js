@@ -3,6 +3,8 @@ const Product = require("../../../products/model");
 const Price = require("../../../products/price/model");
 const Order = require("../../model");
 const Order_Details = require("../model");
+const Bonus = require("../../../products/bonus/model");
+const { logger } = require("sequelize/lib/utils/logger");
 
 exports.createOrderDeatails = async (req, res) => {
   try {
@@ -50,6 +52,22 @@ exports.createOrderDeatails = async (req, res) => {
         order_id: order.id,
         total_price: price.price * quantity,
       });
+
+      // const bonus = await Bonus.findAll({
+      //   where: { category_id: product.category.id },
+      // });
+
+      // if (orderDetail?.quantity >= bonus?.quantity) {
+      //   orderDetails.push({ bonus: bonus });
+      //   console.log(
+      //     "onnnnnnn",
+      //     bonus?.quantity,
+      //     "orrrrrrr",
+      //     orderDetail?.quantity
+      //   );
+      // } else {
+      //   console.log("NOOOOOOO");
+      // }
 
       const newStock = product.stock - quantity;
 

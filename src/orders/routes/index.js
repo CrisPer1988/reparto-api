@@ -7,7 +7,10 @@ const router = express.Router();
 
 router
   .route("/:id")
-  .post(validationsCommerce.validExistsCommerce, controllers.createOrder)
-  .get(validationsZone.validExistsZone, controllers.allOrdersByZone);
+  .post(validationsCommerce.validExistsCommerce, controllers.createOrder);
 
+router
+  .route("/get/:id")
+
+  .post(validationsZone.validExistsZone, controllers.allOrdersByZone);
 module.exports = router;

@@ -22,3 +22,37 @@ exports.createCommerce = async (req, res) => {
     });
   }
 };
+
+exports.allCommerces = async (req, res) => {
+  try {
+    const commerces = await Commerce.findAll({ where: { status: "active" } });
+    return res.status(201).json({
+      status: "Success",
+      commerces,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+
+exports.allCommercesByZone = async (req, res) => {
+  try {
+    const { zone } = req;
+
+    const commercesByZone = await Commerce.findAll({
+      where: { zone_id: zone.id },
+    });
+    return res.status(201).json({
+      status: "Success",
+      commercesByZone,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
