@@ -11,6 +11,8 @@ exports.createOrderDeatails = async (req, res) => {
     const { order } = req;
     const details = req.body.details;
 
+    console.log("DETALLERSSSS", details);
+
     if (!details || !Array.isArray(details)) {
       return res.status(400).json({ message: "Invalid details format" });
     }
@@ -40,8 +42,9 @@ exports.createOrderDeatails = async (req, res) => {
       }
 
       if (quantity > product.stock) {
-        return res.status(400).json({
-          message: `Insufficient stock product ${product_id}`,
+        return res.status(200).json({
+          status: "Failed",
+          message: `Stock insuficiente de: ${product.flavor}, solo quedan: ${product.stock}`,
         });
       }
 

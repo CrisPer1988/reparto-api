@@ -12,6 +12,12 @@ const db = new Sequelize({
   // password: process.env.POSTGRES_DB__PASSWORD,
   // database: process.env.POSTGRES_DB__DATABASE,
   logging: false,
+  timezone: "+00:00", // UTC
+  dialectOptions: {
+    useUTC: true, // Para asegurar que Sequelize maneje las fechas en UTC
+    dateStrings: true, // Para tratar las fechas como cadenas
+  },
+
   // con esto consegui conectar db postgres de azure
   // dialectOptions: {
   //   ssl: {

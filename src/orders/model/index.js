@@ -16,6 +16,10 @@ const Order = db.define("orders", {
     type: DataTypes.UUID,
     allowNull: false,
   },
+  create: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
   commerce_id: {
     type: DataTypes.UUID,
     allowNull: false,

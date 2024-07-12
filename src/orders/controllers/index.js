@@ -2,19 +2,19 @@ const Commerce = require("../../commerce/model");
 const Category = require("../../products/category/model");
 const Product = require("../../products/model");
 const Order = require("../model");
-const Seller = require("../../sellers/model/sellers.model");
 const Order_Details = require("../order_details/model");
 const { Op } = require("sequelize");
 
 exports.createOrder = async (req, res) => {
   try {
     const { commerce } = req;
-    const { seller_id, zone_id } = req.body;
+    const { seller_id, zone_id, create } = req.body;
 
     if (seller_id && zone_id) {
       const order = await Order.create({
         seller_id,
         zone_id,
+        create,
         commerce_id: commerce.id,
       });
 
@@ -35,39 +35,21 @@ exports.allOrdersByZone = async (req, res) => {
     const { zone } = req;
     const { date } = req.body;
 
-    console.log(date);
-
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
     }
 
     const selectedDate = new Date(date);
-    const startOfDay = new Date(
-      Date.UTC(
-        selectedDate.getUTCFullYear(),
-        selectedDate.getUTCMonth(),
-        selectedDate.getUTCDate(),
-        0,
-        0,
-        0
-      )
-    );
-    const endOfDay = new Date(
-      Date.UTC(
-        selectedDate.getUTCFullYear(),
-        selectedDate.getUTCMonth(),
-        selectedDate.getUTCDate(),
-        23,
-        59,
-        59,
-        999
-      )
-    );
+    const startOfDay = new Date(selectedDate);
+    const endOfDay = new Date(selectedDate);
+
+    startOfDay.setUTCHours(0, 0, 0, 0);
+    endOfDay.setUTCHours(23, 59, 59, 999);
 
     const orders = await Order.findAll({
       where: {
         zone_id: zone.id,
-        createdAt: {
+        create: {
           [Op.between]: [startOfDay, endOfDay],
         },
       },
@@ -77,7 +59,6 @@ exports.allOrdersByZone = async (req, res) => {
           include: [{ model: Product, include: [{ model: Category }] }],
         },
         { model: Commerce },
-        // { model: Seller },
       ],
     });
 

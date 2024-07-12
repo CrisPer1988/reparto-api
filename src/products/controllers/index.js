@@ -37,7 +37,9 @@ exports.createProduct = async (req, res) => {
 exports.allProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { status: "active" },
+      where: {
+        status: "active",
+      },
       include: [{ model: Category }, { model: Price }],
     });
 
