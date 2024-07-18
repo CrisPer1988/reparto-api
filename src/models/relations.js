@@ -12,6 +12,7 @@ const Order_Details = require("../orders/order_details/model");
 const Order = require("../orders/model");
 const Commerce = require("../commerce/model");
 const Zone = require("../zone/model");
+const ProductDetails = require("../products/productDetails/model");
 
 const relations = () => {
   // owner => distributor
@@ -22,29 +23,29 @@ const relations = () => {
   Product.hasMany(Price, { foreignKey: "product_id" });
   Price.belongsTo(Product, { foreignKey: "product_id" });
 
-  // category => products
-  Category.hasMany(Product, { foreignKey: "category_id" });
-  Product.belongsTo(Category, { foreignKey: "category_id" });
+  //product => productDetails
+  Product.hasMany(ProductDetails, { foreignKey: "product_id" });
+  ProductDetails.belongsTo(Product, { foreignKey: "product_id" });
 
   //product => order_details
   Product.hasMany(Order_Details, { foreignKey: "product_id" });
   Order_Details.belongsTo(Product, { foreignKey: "product_id" });
 
-  // category => bonus
-  Category.hasMany(Bonus, { foreignKey: "category_id", as: "CategoryBonuses" });
-  Bonus.belongsTo(Category, {
-    foreignKey: "category_id",
-    as: "Category",
+  // product => bonus
+  Product.hasMany(Bonus, { foreignKey: "product_id", as: "ProductBonuses" });
+  Bonus.belongsTo(Product, {
+    foreignKey: "product_id",
+    as: "Product",
   });
 
-  // category_bonus => bonus
-  Category.hasMany(Bonus, {
-    foreignKey: "category_bonus_id",
-    as: "BonusCategories",
+  // product_bonus => bonus
+  Product.hasMany(Bonus, {
+    foreignKey: "product_bonus_id",
+    as: "BonusProduct",
   });
-  Bonus.belongsTo(Category, {
-    foreignKey: "category_bonus_id",
-    as: "BonusCategory",
+  Bonus.belongsTo(Product, {
+    foreignKey: "product_bonus_id",
+    as: "BonusProduct",
   });
 
   //order => order_details

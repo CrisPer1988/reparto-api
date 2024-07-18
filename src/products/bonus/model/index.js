@@ -8,7 +8,7 @@ const Bonus = db.define("bonuses", {
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
-  category_id: {
+  product_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },
@@ -16,7 +16,7 @@ const Bonus = db.define("bonuses", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  category_bonus_id: {
+  product_bonus_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },

@@ -6,6 +6,6 @@ const router = express.Router();
 
 router
   .route("/:id")
-  .post(validationsOrder.validExistsOrder, controllers.createOrderDeatails);
+  .post(validationsOrder.validExistsOrder, controllers.createOrderDetails);
 
 module.exports = router;

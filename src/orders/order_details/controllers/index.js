@@ -4,20 +4,21 @@ const Price = require("../../../products/price/model");
 const Order = require("../../model");
 const Order_Details = require("../model");
 const Bonus = require("../../../products/bonus/model");
-const { logger } = require("sequelize/lib/utils/logger");
 
-exports.createOrderDeatails = async (req, res) => {
+const { Op } = require("sequelize");
+
+exports.createOrderDetails = async (req, res) => {
   try {
     const { order } = req;
     const details = req.body.details;
-
-    console.log("DETALLERSSSS", details);
 
     if (!details || !Array.isArray(details)) {
       return res.status(400).json({ message: "Invalid details format" });
     }
 
     const orderDetails = [];
+    const bonification = {};
+    const applicableBonuses = [];
 
     for (const detail of details) {
       const { product_id, price_id, quantity } = detail;
@@ -56,24 +57,33 @@ exports.createOrderDeatails = async (req, res) => {
         total_price: price.price * quantity,
       });
 
-      // const bonus = await Bonus.findAll({
-      //   where: { category_id: product.category.id },
-      // });
+      const categoryName = product.category.name;
 
-      // if (orderDetail?.quantity >= bonus?.quantity) {
-      //   orderDetails.push({ bonus: bonus });
-      //   console.log(
-      //     "onnnnnnn",
-      //     bonus?.quantity,
-      //     "orrrrrrr",
-      //     orderDetail?.quantity
-      //   );
-      // } else {
-      //   console.log("NOOOOOOO");
-      // }
+      if (bonification[categoryName]) {
+        bonification[categoryName] += quantity;
+      } else {
+        bonification[categoryName] = quantity;
+      }
+
+      const bonus = await Bonus.findOne({
+        where: {
+          category_id: product.category.id,
+          quantity: {
+            [Op.lte]: bonification[categoryName],
+          },
+        },
+        include: [{ model: Category, as: "Category" }],
+      });
+
+      if (bonus) {
+        applicableBonuses.push(bonus);
+        console.log(
+          `BONUS encontrado para la categoría ${categoryName}:`,
+          bonus
+        );
+      }
 
       const newStock = product.stock - quantity;
-
       await product.update({ stock: newStock });
 
       orderDetails.push({
@@ -82,7 +92,7 @@ exports.createOrderDeatails = async (req, res) => {
       });
     }
 
-    return res.status(201).json({ orderDetails });
+    return res.status(201).json({ orderDetails, applicableBonuses });
   } catch (error) {
     res
       .status(500)

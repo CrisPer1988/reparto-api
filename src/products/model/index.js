@@ -8,20 +8,16 @@ const Product = db.define("products", {
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
-  flavor: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  stock: {
+  quantity: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  image: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  category_id: {
-    type: DataTypes.UUID,
+  pack: {
+    type: DataTypes.DECIMAL(10, 1),
     allowNull: false,
   },
   status: {

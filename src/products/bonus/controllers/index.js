@@ -4,12 +4,11 @@ const Bonus = require("../model");
 
 exports.createBonus = async (req, res) => {
   try {
-    const { category_bonus_id, category_id, quantity, bonus_quantity } =
-      req.body;
+    const { product_bonus_id, product_id, quantity, bonus_quantity } = req.body;
 
     const bonus = await Bonus.create({
-      category_bonus_id,
-      category_id,
+      product_bonus_id,
+      product_id,
       quantity,
       bonus_quantity,
     });
@@ -29,8 +28,8 @@ exports.allBunuses = async (req, res) => {
   try {
     const bonuses = await Bonus.findAll({
       include: [
-        { model: Category, as: "Category" },
-        { model: Category, as: "BonusCategory" },
+        { model: Product, as: "Product" },
+        { model: Product, as: "BonusProduct" },
       ],
     });
 

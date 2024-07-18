@@ -12,10 +12,10 @@ app.use(cors());
 
 const ownerRouter = require("./owner/routes");
 const distributorRouter = require("./distributor/routes");
-const productsRouter = require("./products/routes");
+const productDetailsRouter = require("./products/productDetails/routes");
 const sellersRouter = require("./sellers/routes");
 const deliveriesManRouter = require("./delivery_man/routes");
-const categoriesRouter = require("./products/category/routes");
+const productsRouter = require("./products/routes");
 const priceRouter = require("./products/price/routes");
 const zoneRouter = require("./zone/routes");
 const bonusRouter = require("./products/bonus/routes");
@@ -25,9 +25,9 @@ const ordersDetailsRouter = require("./orders/order_details/routes");
 
 app.use("/owner", ownerRouter);
 app.use("/distributor", distributorRouter);
-app.use("/categories", categoriesRouter);
-app.use("/price", priceRouter);
 app.use("/products", productsRouter);
+app.use("/price", priceRouter);
+app.use("/product-details", productDetailsRouter);
 app.use("/sellers", sellersRouter);
 app.use("/deliveries", deliveriesManRouter);
 app.use("/zone", zoneRouter);
