@@ -1,5 +1,6 @@
-const Category = require("../../category/model");
+// const Category = require("../../category/model");
 const Product = require("../../model");
+const ProductDetails = require("../../productDetails/model");
 const Bonus = require("../model");
 
 exports.createBonus = async (req, res) => {

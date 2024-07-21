@@ -1,4 +1,4 @@
-const Category = require("../../../products/category/model");
+// const Category = require("../../../products/category/model");
 const Product = require("../../../products/model");
 const Price = require("../../../products/price/model");
 const Order = require("../../model");
@@ -6,6 +6,7 @@ const Order_Details = require("../model");
 const Bonus = require("../../../products/bonus/model");
 
 const { Op } = require("sequelize");
+const ProductDetails = require("../../../products/productDetails/model");
 
 exports.createOrderDetails = async (req, res) => {
   try {
@@ -21,11 +22,15 @@ exports.createOrderDetails = async (req, res) => {
     const applicableBonuses = [];
 
     for (const detail of details) {
-      const { product_id, price_id, quantity } = detail;
+      const { product_id, price_id, quantity, product_detail_id } = detail;
 
       const product = await Product.findOne({
         where: { id: product_id },
-        include: [{ model: Category }],
+        include: [{ model: ProductDetails }],
+      });
+
+      const productDetails = await ProductDetails.findOne({
+        where: { id: product_detail_id },
       });
 
       if (!product) {
@@ -42,54 +47,58 @@ exports.createOrderDetails = async (req, res) => {
           .json({ message: `Price with id ${price_id} not found` });
       }
 
-      if (quantity > product.stock) {
+      if (quantity > productDetails.stock) {
         return res.status(200).json({
           status: "Failed",
-          message: `Stock insuficiente de: ${product.flavor}, solo quedan: ${product.stock}`,
+          message: `Stock insuficiente de: ${productDetails.flavor}, solo quedan: ${productDetails.stock}`,
         });
       }
 
       const orderDetail = await Order_Details.create({
         product_id,
         price_id,
+        product_detail_id,
         quantity,
         order_id: order.id,
         total_price: price.price * quantity,
       });
 
-      const categoryName = product.category.name;
+      // const categoryName = product.name;
 
-      if (bonification[categoryName]) {
-        bonification[categoryName] += quantity;
-      } else {
-        bonification[categoryName] = quantity;
-      }
+      // if (bonification[categoryName]) {
+      //   bonification[categoryName] += quantity;
+      // } else {
+      //   bonification[categoryName] = quantity;
+      // }
 
-      const bonus = await Bonus.findOne({
-        where: {
-          category_id: product.category.id,
-          quantity: {
-            [Op.lte]: bonification[categoryName],
-          },
-        },
-        include: [{ model: Category, as: "Category" }],
-      });
+      // const bonus = await Bonus.findOne({
+      //   where: {
+      //     category_id: product.id,
+      //     quantity: {
+      //       [Op.lte]: bonification[categoryName],
+      //     },
+      //   },
+      //   // include: [{ model: Category, as: "Category" }],
+      // });
 
-      if (bonus) {
-        applicableBonuses.push(bonus);
-        console.log(
-          `BONUS encontrado para la categoría ${categoryName}:`,
-          bonus
-        );
-      }
+      // if (bonus) {
+      //   applicableBonuses.push(bonus);
+      //   console.log(
+      //     `BONUS encontrado para la categoría ${categoryName}:`,
+      //     bonus
+      //   );
+      // }
 
-      const newStock = product.stock - quantity;
-      await product.update({ stock: newStock });
+      const newStock = productDetails.stock - quantity;
+      await productDetails.update({ stock: newStock });
 
       orderDetails.push({
-        product: product,
+        product,
+        productDetails,
         total_price: orderDetail.total_price,
       });
+
+      console.log("PRODUCTTTT", productDetails);
     }
 
     return res.status(201).json({ orderDetails, applicableBonuses });

@@ -1,6 +1,7 @@
 const Commerce = require("../../commerce/model");
-const Category = require("../../products/category/model");
+// const Category = require("../../products/category/model");
 const Product = require("../../products/model");
+const ProductDetails = require("../../products/productDetails/model");
 const Order = require("../model");
 const Order_Details = require("../order_details/model");
 const { Op } = require("sequelize");
@@ -10,11 +11,14 @@ exports.createOrder = async (req, res) => {
     const { commerce } = req;
     const { seller_id, zone_id, create } = req.body;
 
+    console.log(req.body);
+    const date = new Date();
+
     if (seller_id && zone_id) {
       const order = await Order.create({
         seller_id,
         zone_id,
-        create,
+        create: date,
         commerce_id: commerce.id,
       });
 
@@ -56,7 +60,7 @@ exports.allOrdersByZone = async (req, res) => {
       include: [
         {
           model: Order_Details,
-          include: [{ model: Product, include: [{ model: Category }] }],
+          include: [{ model: Product, include: [{ model: ProductDetails }] }],
         },
         { model: Commerce },
       ],

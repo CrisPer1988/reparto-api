@@ -7,7 +7,7 @@ const Owner = require("../owner/model");
 // const Category_Product = require("../products/type/model");
 const Price = require("../products/price/model");
 const Bonus = require("../products/bonus/model");
-const Category = require("../products/category/model");
+// const Category = require("../products/category/model");
 const Order_Details = require("../orders/order_details/model");
 const Order = require("../orders/model");
 const Commerce = require("../commerce/model");
@@ -37,6 +37,10 @@ const relations = () => {
     foreignKey: "product_id",
     as: "Product",
   });
+
+  // // productDetails => bonus
+  // ProductDetails.hasMany(Bonus, { foreignKey: "product_details_bonus_id" });
+  // Bonus.belongsTo(ProductDetails, { foreignKey: "product_details_bonus_id" });
 
   // product_bonus => bonus
   Product.hasMany(Bonus, {

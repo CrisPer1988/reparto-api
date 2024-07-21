@@ -16,6 +16,10 @@ const Order_Details = db.define("orders_details", {
     type: DataTypes.UUID,
     allowNull: false,
   },
+  product_detail_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
   price_id: {
     type: DataTypes.UUID,
     allowNull: false,
