@@ -63,31 +63,33 @@ exports.createOrderDetails = async (req, res) => {
         total_price: price.price * quantity,
       });
 
-      // const categoryName = product.name;
+      const productName = product.name;
 
-      // if (bonification[categoryName]) {
-      //   bonification[categoryName] += quantity;
-      // } else {
-      //   bonification[categoryName] = quantity;
-      // }
+      if (bonification[productName]) {
+        bonification[productName] += quantity;
+      } else {
+        bonification[productName] = quantity;
+      }
 
-      // const bonus = await Bonus.findOne({
-      //   where: {
-      //     category_id: product.id,
-      //     quantity: {
-      //       [Op.lte]: bonification[categoryName],
-      //     },
-      //   },
-      //   // include: [{ model: Category, as: "Category" }],
-      // });
+      const bonus = await Bonus.findOne({
+        where: {
+          product_id: product.id,
+          quantity: {
+            [Op.lte]: bonification[productName],
+          },
+        },
+        include: [{ model: Product, as: "BonusProduct" }],
+      });
 
-      // if (bonus) {
-      //   applicableBonuses.push(bonus);
-      //   console.log(
-      //     `BONUS encontrado para la categoría ${categoryName}:`,
-      //     bonus
-      //   );
-      // }
+      console.log("BONUSSSSSSSSSS", bonus);
+
+      if (bonus) {
+        applicableBonuses.push(bonus);
+        console.log(
+          `BONUS encontrado para la categoría ${productName}:`,
+          bonus
+        );
+      }
 
       const newStock = productDetails.stock - quantity;
       await productDetails.update({ stock: newStock });
@@ -97,8 +99,6 @@ exports.createOrderDetails = async (req, res) => {
         productDetails,
         total_price: orderDetail.total_price,
       });
-
-      console.log("PRODUCTTTT", productDetails);
     }
 
     return res.status(201).json({ orderDetails, applicableBonuses });
