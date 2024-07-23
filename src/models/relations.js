@@ -71,6 +71,10 @@ const relations = () => {
   //seller => zone
   Seller.hasMany(Zone, { foreignKey: "seller_id" });
   Zone.belongsTo(Seller, { foreignKey: "seller_id" });
+
+  // zones => commerces
+  Zone.hasMany(Commerce, { foreignKey: "zone_id" });
+  Commerce.belongsTo(Zone, { foreignKey: "zone_id" });
 };
 
 module.exports = relations;

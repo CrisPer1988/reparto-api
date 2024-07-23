@@ -5,10 +5,7 @@ const zonesValidatios = require("../../zone/middlewares");
 
 const router = express.Router();
 
-router
-  .route("/")
-  .post(controller.createCommerce)
-  .get(controller.createCommerce);
+router.route("/").post(controller.createCommerce).get(controller.allCommerces);
 
 router
   .route("/:id")

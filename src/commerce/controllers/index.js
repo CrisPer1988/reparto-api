@@ -1,3 +1,5 @@
+const Order = require("../../orders/model");
+const Zone = require("../../zone/model");
 const Commerce = require("../model");
 
 exports.createCommerce = async (req, res) => {
@@ -26,6 +28,27 @@ exports.createCommerce = async (req, res) => {
 exports.allCommerces = async (req, res) => {
   try {
     const commerces = await Commerce.findAll({ where: { status: "active" } });
+    return res.status(201).json({
+      status: "Success",
+      commerces,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+
+exports.allCommerces = async (req, res) => {
+  try {
+    const commerces = await Commerce.findAll({
+      where: { status: "active" },
+      include: [
+        { model: Order, order: [["createdAt", "ASC"]] },
+        { model: Zone },
+      ],
+    });
     return res.status(201).json({
       status: "Success",
       commerces,
