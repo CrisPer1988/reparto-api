@@ -31,3 +31,26 @@ exports.createProductDetails = async (req, res) => {
     });
   }
 };
+
+exports.allProductDetailsByProduct = async (req, res) => {
+  try {
+    const { product } = req;
+
+    console.log(product);
+
+    const productDetails = await ProductDetails.findAll({
+      where: {
+        product_id: product.id,
+      },
+    });
+
+    return res.status(201).json({
+      status: "Success",
+      productDetails,
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+    });
+  }
+};

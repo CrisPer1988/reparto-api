@@ -52,6 +52,10 @@ const relations = () => {
     as: "BonusProduct",
   });
 
+  // productDetails => Bonus
+  ProductDetails.hasMany(Bonus, { foreignKey: "product_detail_bonus_id" });
+  Bonus.belongsTo(ProductDetails, { foreignKey: "product_detail_bonus_id" });
+
   //order => order_details
   Order.hasMany(Order_Details, { foreignKey: "order_id" });
   Order_Details.belongsTo(Order, { foreignKey: "order_id" });

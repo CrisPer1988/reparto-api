@@ -65,12 +65,16 @@ exports.allCommercesByZone = async (req, res) => {
   try {
     const { zone } = req;
 
-    const commercesByZone = await Commerce.findAll({
+    const commerces = await Commerce.findAll({
       where: { zone_id: zone.id },
+      include: [
+        { model: Order, order: [["createdAt", "ASC"]] },
+        { model: Zone },
+      ],
     });
     return res.status(201).json({
       status: "Success",
-      commercesByZone,
+      commerces,
     });
   } catch (error) {
     return res.status(500).json({

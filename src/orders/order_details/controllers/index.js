@@ -5,7 +5,7 @@ const Order = require("../../model");
 const Order_Details = require("../model");
 const Bonus = require("../../../products/bonus/model");
 
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const ProductDetails = require("../../../products/productDetails/model");
 
 exports.createOrderDetails = async (req, res) => {
@@ -71,7 +71,17 @@ exports.createOrderDetails = async (req, res) => {
         bonification[productName] = quantity;
       }
 
-      const bonus = await Bonus.findOne({
+      // const bonus = await Bonus.findOne({
+      //   where: {
+      //     product_id: product.id,
+      //     quantity: {
+      //       [Op.lte]: bonification[productName],
+      //     },
+      //   },
+      //   include: [{ model: Product, as: "BonusProduct" }],
+      // });
+
+      const bonuses = await Bonus.findAll({
         where: {
           product_id: product.id,
           quantity: {
@@ -79,16 +89,34 @@ exports.createOrderDetails = async (req, res) => {
           },
         },
         include: [{ model: Product, as: "BonusProduct" }],
+        order: [["quantity", "DESC"]], // Ordena los resultados por quantity en orden descendente
+        limit: 1, // Toma solo el primer registro (el de mayor quantity)
       });
+
+      const bonus = bonuses[0];
 
       console.log("BONUSSSSSSSSSS", bonus);
 
       if (bonus) {
+        const productDetailBonus = await ProductDetails.findOne({
+          where: { id: bonus.product_detail_bonus_id },
+          include: [{ model: Product }],
+        });
+        const newStock =
+          (productDetailBonus.stock * productDetailBonus.product.pack -
+            bonus.bonus_quantity) /
+          productDetailBonus.product.pack;
+
+        // const newStock = productDetailBonus.stock - bonus.bonus_quantity;
+        await productDetailBonus.update({
+          stock: newStock,
+        });
+        // console.log("BOBOBOBOBOBOBOBOB", newStock);
         applicableBonuses.push(bonus);
-        console.log(
-          `BONUS encontrado para la categoría ${productName}:`,
-          bonus
-        );
+        // console.log(
+        //   `BONUS encontrado para la categoría ${productName}:`,
+        //   bonus
+        // );
       }
 
       const newStock = productDetails.stock - quantity;

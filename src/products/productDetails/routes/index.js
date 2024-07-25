@@ -14,6 +14,14 @@ router
     upload.single("file"),
     controllers.createProductDetails
   );
+
+router
+  .route("/product/:id")
+  .get(
+    productsValidations.validExistsProduct,
+    controllers.allProductDetailsByProduct
+  );
+
 // router.route("/").get(controllers.allProducts);
 
 module.exports = router;

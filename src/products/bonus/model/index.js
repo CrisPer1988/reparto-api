@@ -20,6 +20,10 @@ const Bonus = db.define("bonuses", {
     type: DataTypes.UUID,
     allowNull: false,
   },
+  product_detail_bonus_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
   bonus_quantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
