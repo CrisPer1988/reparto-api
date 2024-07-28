@@ -7,6 +7,7 @@ const Bonus = require("../../../products/bonus/model");
 
 const { Op, where } = require("sequelize");
 const ProductDetails = require("../../../products/productDetails/model");
+const BonusOrder = require("../../../products/bonus/bonusOrder/model");
 
 exports.createOrderDetails = async (req, res) => {
   try {
@@ -89,13 +90,11 @@ exports.createOrderDetails = async (req, res) => {
           },
         },
         include: [{ model: Product, as: "BonusProduct" }],
-        order: [["quantity", "DESC"]], // Ordena los resultados por quantity en orden descendente
-        limit: 1, // Toma solo el primer registro (el de mayor quantity)
+        order: [["quantity", "DESC"]],
+        limit: 1,
       });
 
       const bonus = bonuses[0];
-
-      console.log("BONUSSSSSSSSSS", bonus);
 
       if (bonus) {
         const productDetailBonus = await ProductDetails.findOne({
@@ -107,16 +106,15 @@ exports.createOrderDetails = async (req, res) => {
             bonus.bonus_quantity) /
           productDetailBonus.product.pack;
 
-        // const newStock = productDetailBonus.stock - bonus.bonus_quantity;
         await productDetailBonus.update({
           stock: newStock,
         });
-        // console.log("BOBOBOBOBOBOBOBOB", newStock);
         applicableBonuses.push(bonus);
-        // console.log(
-        //   `BONUS encontrado para la categoría ${productName}:`,
-        //   bonus
-        // );
+
+        await BonusOrder.create({
+          order_id: order.id,
+          bonus_id: bonus.id,
+        });
       }
 
       const newStock = productDetails.stock - quantity;

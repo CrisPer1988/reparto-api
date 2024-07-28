@@ -37,7 +37,11 @@ exports.allBunuses = async (req, res) => {
     const bonuses = await Bonus.findAll({
       include: [
         { model: Product, as: "Product" },
-        { model: Product, as: "BonusProduct" },
+        {
+          model: Product,
+          as: "BonusProduct",
+        },
+        { model: ProductDetails },
       ],
     });
 

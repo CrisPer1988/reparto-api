@@ -45,11 +45,29 @@ exports.loginSeller = async (req, res) => {
 
 exports.allSeller = async (req, res) => {
   try {
-    const sellers = await Seller.findAll();
+    const sellers = await Seller.findAll({ where: { status: "active" } });
 
     return res.status(200).json({
       status: "Success",
       sellers,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteSeller = async (req, res) => {
+  try {
+    const { seller } = req;
+
+    await seller.update({ status: "disabled" });
+
+    return res.status(200).json({
+      status: "Success, SELLER DELETED",
+      // sellers,
     });
   } catch (error) {
     return res.status(500).json({

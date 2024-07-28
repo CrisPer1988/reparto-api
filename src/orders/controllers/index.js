@@ -1,4 +1,5 @@
 const Commerce = require("../../commerce/model");
+const BonusOrder = require("../../products/bonus/bonusOrder/model");
 const Bonus = require("../../products/bonus/model");
 // const Category = require("../../products/category/model");
 const Product = require("../../products/model");
@@ -106,11 +107,28 @@ exports.allOrdersByZone = async (req, res) => {
           include: [
             {
               model: Product,
-              include: [{ model: ProductDetails }],
+              // include: [{ model: ProductDetails }],
             },
+            { model: ProductDetails },
           ],
         },
         { model: Commerce },
+        {
+          model: BonusOrder,
+          include: [
+            {
+              model: Bonus,
+              include: [
+                { model: Product, as: "Product" },
+                {
+                  model: Product,
+                  as: "BonusProduct",
+                },
+                { model: ProductDetails },
+              ],
+            },
+          ],
+        },
       ],
     });
 
