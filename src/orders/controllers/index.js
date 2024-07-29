@@ -3,6 +3,7 @@ const BonusOrder = require("../../products/bonus/bonusOrder/model");
 const Bonus = require("../../products/bonus/model");
 // const Category = require("../../products/category/model");
 const Product = require("../../products/model");
+const Price = require("../../products/price/model");
 const ProductDetails = require("../../products/productDetails/model");
 const Order = require("../model");
 const Order_Details = require("../order_details/model");
@@ -141,7 +142,7 @@ exports.allOrdersByZone = async (req, res) => {
   }
 };
 
-exports.totalPurchasesByDateRange = async (req, res) => {
+exports.totalSalesByDateRange = async (req, res) => {
   const { startDate, endDate } = req.body;
 
   const start = new Date(startDate);
@@ -153,18 +154,23 @@ exports.totalPurchasesByDateRange = async (req, res) => {
   let totalPrice = 0;
 
   try {
-    const orders = await Order.findAll({
+    const sales = await Order.findAll({
       where: {
         create: {
           [Op.between]: [start, end],
         },
       },
-      include: [{ model: Order_Details }],
+      include: [
+        {
+          model: Order_Details,
+          include: [{ model: Product, include: [{ model: Price }] }],
+        },
+      ],
     });
 
-    orders.forEach((order) => {
-      if (order.orders_details && Array.isArray(order.orders_details)) {
-        totalPrice += order.orders_details.reduce(
+    sales.forEach((sale) => {
+      if (sale.orders_details && Array.isArray(sale.orders_details)) {
+        totalPrice += sale.orders_details.reduce(
           (sum, detail) => sum + detail.total_price,
           0
         );
@@ -173,7 +179,7 @@ exports.totalPurchasesByDateRange = async (req, res) => {
 
     return res.status(200).json({
       status: "Success",
-      orders,
+      sales,
       totalPrice,
     });
   } catch (error) {

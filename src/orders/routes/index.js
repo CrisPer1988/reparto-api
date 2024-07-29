@@ -5,7 +5,7 @@ const validationsCommerce = require("../../commerce/middlewares");
 const validationsZone = require("../../zone/middlewares");
 const router = express.Router();
 
-router.route("/").post(controllers.totalPurchasesByDateRange);
+router.route("/").post(controllers.totalSalesByDateRange);
 
 router
   .route("/:id")
