@@ -82,6 +82,9 @@ exports.createOrderDetails = async (req, res) => {
       //   include: [{ model: Product, as: "BonusProduct" }],
       // });
 
+      const newStock = productDetails.stock - quantity;
+      await productDetails.update({ stock: newStock });
+
       const bonuses = await Bonus.findAll({
         where: {
           product_id: product.id,
@@ -106,6 +109,9 @@ exports.createOrderDetails = async (req, res) => {
             bonus.bonus_quantity) /
           productDetailBonus.product.pack;
 
+        console.log("NEW STOCK", newStock);
+        console.log("CANTIDAD", bonus.bonus_quantity);
+
         await productDetailBonus.update({
           stock: newStock,
         });
@@ -116,9 +122,6 @@ exports.createOrderDetails = async (req, res) => {
           bonus_id: bonus.id,
         });
       }
-
-      const newStock = productDetails.stock - quantity;
-      await productDetails.update({ stock: newStock });
 
       orderDetails.push({
         product,

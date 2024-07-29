@@ -6,7 +6,7 @@ const Product = require("../../products/model");
 const ProductDetails = require("../../products/productDetails/model");
 const Order = require("../model");
 const Order_Details = require("../order_details/model");
-const { Op } = require("sequelize");
+const { Op, or } = require("sequelize");
 
 exports.createOrder = async (req, res) => {
   try {
@@ -107,7 +107,6 @@ exports.allOrdersByZone = async (req, res) => {
           include: [
             {
               model: Product,
-              // include: [{ model: ProductDetails }],
             },
             { model: ProductDetails },
           ],
@@ -139,5 +138,49 @@ exports.allOrdersByZone = async (req, res) => {
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+exports.totalPurchasesByDateRange = async (req, res) => {
+  const { startDate, endDate } = req.body;
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  start.setUTCHours(3, 0, 0, 0);
+  end.setUTCHours(26, 59, 59, 999);
+
+  let totalPrice = 0;
+
+  try {
+    const orders = await Order.findAll({
+      where: {
+        create: {
+          [Op.between]: [start, end],
+        },
+      },
+      include: [{ model: Order_Details }],
+    });
+
+    orders.forEach((order) => {
+      if (order.orders_details && Array.isArray(order.orders_details)) {
+        totalPrice += order.orders_details.reduce(
+          (sum, detail) => sum + detail.total_price,
+          0
+        );
+      }
+    });
+
+    return res.status(200).json({
+      status: "Success",
+      orders,
+      totalPrice,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "Error",
+      message: "Something went wrong",
+    });
   }
 };
