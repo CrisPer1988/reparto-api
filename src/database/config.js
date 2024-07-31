@@ -45,11 +45,12 @@ const db = new Sequelize({
       require: true,
       rejectUnauthorized: false, // Esto soluciona errores de SSL
     },
+    connectTimeout: 60000, // Aumenta el tiempo de espera a 60 segundos
   },
   pool: {
     max: 5,
     min: 0,
-    acquire: 30000,
+    acquire: 60000, // Aumenta el tiempo de adquisición a 60 segundos
     idle: 10000,
   },
 });
