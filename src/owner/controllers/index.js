@@ -3,7 +3,9 @@ const bcrypt = require("bcryptjs");
 
 exports.createOwner = async (req, res) => {
   try {
+    console.log("ENTREEEEEEEE");
     const { firstname, lastname, email, password } = req.body;
+    console.log("ENTREEEEEEEE", req.body);
 
     const salt = await bcrypt.genSalt(10);
     const encryptedPassword = await bcrypt.hash(password, salt);
@@ -19,5 +21,9 @@ exports.createOwner = async (req, res) => {
       status: "Success",
       owner,
     });
-  } catch (error) {}
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
 };
