@@ -1,31 +1,56 @@
+// const { Sequelize } = require("sequelize");
+// const pg = require("pg");
+
+// const db = new Sequelize({
+//   dialect: process.env.DB_DIALECT,
+//   dialectModule: pg,
+//   host: process.env.DB_HOST,
+//   username: process.env.DB_USERNAME,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_DATABASE,
+//   logging: false,
+//   timezone: "+00:00", // UTC
+//   dialectOptions: {
+//     useUTC: true, // Para asegurar que Sequelize maneje las fechas en UTC
+//     dateStrings: true, // Para tratar las fechas como cadenas
+//   },
+
+//   // con esto consegui conectar db postgres de azure
+//   dialectOptions: {
+//     ssl: {
+//       require: true, // Esto ayuda. Pero genera un nuevo error.
+//       rejectUnauthorized: false, // Esta línea solucionará el nuevo error.
+//     },
+//   },
+// });
+
+// module.exports = { db };
+
 const { Sequelize } = require("sequelize");
 const pg = require("pg");
 
 const db = new Sequelize({
-  dialect: process.env.DB_DIALECT,
+  dialect: process.env.DB_DIALECT || "postgres",
   dialectModule: pg,
   host: process.env.DB_HOST,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  // dialect: process.env.DB_DIALECT,
-  // host: process.env.POSTGRES_DB__HOST,
-  // username: process.env.POSTGRES_DB__USER,
-  // password: process.env.POSTGRES_DB__PASSWORD,
-  // database: process.env.POSTGRES_DB__DATABASE,
   logging: false,
   timezone: "+00:00", // UTC
   dialectOptions: {
     useUTC: true, // Para asegurar que Sequelize maneje las fechas en UTC
     dateStrings: true, // Para tratar las fechas como cadenas
-  },
-
-  // con esto consegui conectar db postgres de azure
-  dialectOptions: {
     ssl: {
-      require: true, // Esto ayuda. Pero genera un nuevo error.
-      rejectUnauthorized: false, // Esta línea solucionará el nuevo error.
+      require: true,
+      rejectUnauthorized: false, // Esto soluciona errores de SSL
     },
+  },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
   },
 });
 
