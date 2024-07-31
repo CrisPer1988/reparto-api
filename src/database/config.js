@@ -19,12 +19,12 @@ const db = new Sequelize({
   },
 
   // con esto consegui conectar db postgres de azure
-  // dialectOptions: {
-  //   ssl: {
-  //     require: true, // Esto ayuda. Pero genera un nuevo error.
-  //     rejectUnauthorized: false, // Esta línea solucionará el nuevo error.
-  //   },
-  // },
+  dialectOptions: {
+    ssl: {
+      require: true, // Esto ayuda. Pero genera un nuevo error.
+      rejectUnauthorized: false, // Esta línea solucionará el nuevo error.
+    },
+  },
 });
 
 module.exports = { db };
