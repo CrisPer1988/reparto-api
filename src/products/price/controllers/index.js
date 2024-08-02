@@ -21,3 +21,24 @@ exports.createPrice = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+exports.updatedPrice = async (req, res) => {
+  try {
+    const { price } = req;
+    const { name, newPrice } = req.body;
+
+    const priceUpdated = await price.update({
+      price: newPrice || price.price,
+      name: name || price.name,
+    });
+
+    return res.status(201).json({
+      status: "Success",
+      priceUpdated,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
