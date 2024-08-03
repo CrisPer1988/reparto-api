@@ -8,6 +8,12 @@ const Order = db.define("orders", {
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
+  number_order: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    unique: true,
+  },
   seller_id: {
     type: DataTypes.UUID,
     allowNull: false,

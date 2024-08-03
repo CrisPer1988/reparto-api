@@ -1,10 +1,10 @@
 const Commerce = require("../../commerce/model");
 const BonusOrder = require("../../products/bonus/bonusOrder/model");
 const Bonus = require("../../products/bonus/model");
-// const Category = require("../../products/category/model");
 const Product = require("../../products/model");
 const Price = require("../../products/price/model");
 const ProductDetails = require("../../products/productDetails/model");
+const Zone = require("../../zone/model");
 const Order = require("../model");
 const Order_Details = require("../order_details/model");
 const { Op, or } = require("sequelize");
@@ -156,6 +156,7 @@ exports.totalSalesByDateRange = async (req, res) => {
   try {
     const sales = await Order.findAll({
       where: {
+        status: "pending",
         create: {
           [Op.between]: [start, end],
         },
@@ -181,6 +182,109 @@ exports.totalSalesByDateRange = async (req, res) => {
       status: "Success",
       sales,
       totalPrice,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "Error",
+      message: "Something went wrong",
+    });
+  }
+};
+
+exports.totalSalesByDateRangeCompleted = async (req, res) => {
+  const { startDate, endDate } = req.body;
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  start.setUTCHours(3, 0, 0, 0);
+  end.setUTCHours(26, 59, 59, 999);
+
+  let totalPrice = 0;
+
+  try {
+    const sales = await Order.findAll({
+      where: {
+        status: "completed",
+        create: {
+          [Op.between]: [start, end],
+        },
+      },
+      include: [
+        {
+          model: Order_Details,
+          include: [{ model: Product, include: [{ model: Price }] }],
+        },
+      ],
+    });
+
+    sales.forEach((sale) => {
+      if (sale.orders_details && Array.isArray(sale.orders_details)) {
+        totalPrice += sale.orders_details.reduce(
+          (sum, detail) => sum + detail.total_price,
+          0
+        );
+      }
+    });
+
+    return res.status(200).json({
+      status: "Success",
+      sales,
+      totalPrice,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "Error",
+      message: "Something went wrong",
+    });
+  }
+};
+
+exports.totalOrdersPending = async (req, res) => {
+  try {
+    const orders_pending = await Order.findAll({
+      where: {
+        status: "pending",
+      },
+      include: [
+        {
+          model: Order_Details,
+          include: [
+            {
+              model: Product,
+              include: [{ model: Price }],
+            },
+
+            { model: ProductDetails },
+          ],
+        },
+
+        { model: Zone },
+        { model: Commerce },
+      ],
+    });
+    return res.status(200).json({
+      orders_pending,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "Error",
+      message: "Something went wrong",
+    });
+  }
+};
+
+exports.completedOrder = async (req, res) => {
+  try {
+    const { order } = req;
+
+    await order.update({ status: "completed" });
+
+    return res.status(200).json({
+      message: "Order Completed",
     });
   } catch (error) {
     console.error(error);
