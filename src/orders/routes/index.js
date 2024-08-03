@@ -15,6 +15,10 @@ router
   .post(validationsOrder.validExistsOrder, controllers.completedOrder);
 
 router
+  .route("/:id/rejected")
+  .get(validationsOrder.validExistsOrder, controllers.rejectedOrder);
+
+router
   .route("/:id")
   .post(validationsCommerce.validExistsCommerce, controllers.createOrder);
 

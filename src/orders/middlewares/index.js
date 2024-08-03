@@ -1,4 +1,7 @@
+const Product = require("../../products/model");
+const ProductDetails = require("../../products/productDetails/model");
 const Order = require("../model");
+const Order_Details = require("../order_details/model");
 
 exports.validExistsOrder = async (req, res, next) => {
   try {
@@ -9,6 +12,17 @@ exports.validExistsOrder = async (req, res, next) => {
         id,
         status: "pending",
       },
+      include: [
+        {
+          model: Order_Details,
+          include: [
+            {
+              model: Product,
+            },
+            { model: ProductDetails },
+          ],
+        },
+      ],
     });
 
     if (!order) {

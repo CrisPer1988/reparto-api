@@ -294,3 +294,36 @@ exports.completedOrder = async (req, res) => {
     });
   }
 };
+
+exports.rejectedOrder = async (req, res) => {
+  // REVISAR ACTUALIZACION DE BONOFICACIONES
+  try {
+    const { order } = req;
+
+    let details = order.orders_details;
+
+    for (let detail of details) {
+      const productDetail = await ProductDetails.findOne({
+        where: { id: detail.productsDetail.id },
+      });
+
+      if (productDetail) {
+        productDetail.stock =
+          parseInt(productDetail.stock, 10) + detail.quantity;
+        await productDetail.save();
+      }
+    }
+
+    await order.update({ status: "rejected" });
+
+    return res.status(200).json({
+      message: "Order rejected and stock updated",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "Error",
+      message: "Something went wrong",
+    });
+  }
+};
