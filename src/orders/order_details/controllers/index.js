@@ -99,7 +99,7 @@ exports.createOrderDetails = async (req, res) => {
 
       const bonus = bonuses[0];
 
-      if (bonus) {
+      if (bonus && price.name === "Normal") {
         const productDetailBonus = await ProductDetails.findOne({
           where: { id: bonus.product_detail_bonus_id },
           include: [{ model: Product }],

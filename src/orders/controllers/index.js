@@ -296,7 +296,6 @@ exports.completedOrder = async (req, res) => {
 };
 
 exports.rejectedOrder = async (req, res) => {
-  // REVISAR ACTUALIZACION DE BONOFICACIONES
   try {
     const { order } = req;
 
@@ -305,11 +304,20 @@ exports.rejectedOrder = async (req, res) => {
     for (let detail of details) {
       const productDetail = await ProductDetails.findOne({
         where: { id: detail.productsDetail.id },
+        include: [{ model: Bonus }],
       });
 
       if (productDetail) {
         productDetail.stock =
           parseInt(productDetail.stock, 10) + detail.quantity;
+
+        const productPackSize = detail.product.pack;
+        for (let bonus of productDetail.bonuses) {
+          const bonusPacks =
+            parseInt(bonus.bonus_quantity, 10) / productPackSize;
+          productDetail.stock += bonusPacks;
+        }
+
         await productDetail.save();
       }
     }
