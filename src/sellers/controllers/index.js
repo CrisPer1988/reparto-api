@@ -1,6 +1,7 @@
 const { createFunction } = require("../../utils/create.function");
 const { loginFunction } = require("../../utils/loginFunction");
 const Seller = require("../model/sellers.model");
+const Zone = require("../../zone/model");
 
 exports.createSeller = async (req, res) => {
   try {
@@ -63,11 +64,16 @@ exports.deleteSeller = async (req, res) => {
   try {
     const { seller } = req;
 
+    const zones = await Zone.findAll({ where: { seller_id: seller.id } });
+
+    for (const zone of zones) {
+      await zone.update({ seller_id: null });
+    }
+
     await seller.update({ status: "disabled" });
 
     return res.status(200).json({
-      status: "Success, SELLER DELETED",
-      // sellers,
+      status: "Success",
     });
   } catch (error) {
     return res.status(500).json({
