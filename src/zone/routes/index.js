@@ -9,8 +9,9 @@ router.route("/").post(controllers.createZone).get(controllers.allZones);
 
 router
   .route("/:id")
-  .patch(zoneValidations.validExistsZone, controllers.updateZone)
-  .get(zoneValidations.validExistsZone, controllers.oneZone);
+  // .patch(zoneValidations.validExistsZone, controllers.updateZone)
+  .get(zoneValidations.validExistsZone, controllers.oneZone)
+  .delete(zoneValidations.validExistsZone, controllers.deleteZone);
 
 router
   .route("/seller/:id")
