@@ -81,27 +81,26 @@ exports.allZonesBySeller = async (req, res) => {
   }
 };
 
-// exports.updateZone = async (req, res) => {
-//   try {
-//     const { zone } = req;
-//     const { seller_id, name } = req.body;
+exports.updateZone = async (req, res) => {
+  try {
+    const { zone } = req;
+    const { seller_id, name } = req.body;
 
-//     await zone.update({
-//       seller_id: seller_id || zone.seller_id,
-//       delivery_man_id: delivery_man_id || zone.delivery_man_id,
-//       name: name || zone.name,
-//     });
+    await zone.update({
+      seller_id: seller_id || zone.seller_id,
+      name: name || zone.name,
+    });
 
-//     return res.status(201).json({
-//       status: "Success",
-//       zone,
-//     });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ message: "Internal server error", error: error.message });
-//   }
-// };
+    return res.status(201).json({
+      status: "Success",
+      // zone,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
 
 exports.deleteZone = async (req, res) => {
   try {
