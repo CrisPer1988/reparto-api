@@ -43,6 +43,10 @@ router
     productsValidations.validExistsProduct,
     upload.single("file"),
     controllers.createProductDetails
+  )
+  .delete(
+    productDetailValidations.validExistsProductDetail,
+    controllers.deleteProductDetail
   );
 
 router
