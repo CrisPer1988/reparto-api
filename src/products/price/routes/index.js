@@ -7,7 +7,8 @@ const router = express.Router();
 
 router
   .route("/:id")
-  .post(productsValidations.validExistsProduct, controllers.createPrice);
+  .post(productsValidations.validExistsProduct, controllers.createPrice)
+  .delete(pricesValidations.validExistsPrice, controllers.deletePrice);
 
 router
   .route("/price/:id")

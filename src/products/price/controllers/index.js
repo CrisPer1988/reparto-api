@@ -42,3 +42,21 @@ exports.updatedPrice = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+exports.deletePrice = async (req, res) => {
+  try {
+    const { price } = req;
+
+    await price.update({
+      status: "disabled",
+    });
+
+    return res.status(201).json({
+      status: "Success",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
