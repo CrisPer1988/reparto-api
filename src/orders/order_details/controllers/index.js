@@ -109,9 +109,6 @@ exports.createOrderDetails = async (req, res) => {
             bonus.bonus_quantity) /
           productDetailBonus.product.pack;
 
-        console.log("NEW STOCK", newStock);
-        console.log("CANTIDAD", bonus.bonus_quantity);
-
         await productDetailBonus.update({
           stock: newStock,
         });

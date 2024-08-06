@@ -32,6 +32,7 @@ const path = require("path");
 
 const controllers = require("../controller");
 const productsValidations = require("../../middlewares");
+const productDetailValidations = require("../../productDetails/middlewares");
 
 const router = express.Router();
 const upload = multer({ dest: path.join("/tmp", "uploads") });
@@ -42,6 +43,13 @@ router
     productsValidations.validExistsProduct,
     upload.single("file"),
     controllers.createProductDetails
+  );
+
+router
+  .route("/:id/stock")
+  .patch(
+    productDetailValidations.validExistsProductDetail,
+    controllers.editStock
   );
 
 router
