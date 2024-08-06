@@ -33,12 +33,14 @@ exports.allProducts = async (req, res) => {
           where: {
             status: "active",
           },
+          required: false,
         },
         {
           model: ProductDetails,
           where: {
             status: "active",
           },
+          required: false,
         },
       ],
     });
