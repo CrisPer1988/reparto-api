@@ -110,6 +110,7 @@ exports.allOrdersByZone = async (req, res) => {
               model: Product,
             },
             { model: ProductDetails },
+            { model: Price },
           ],
         },
         { model: Commerce },

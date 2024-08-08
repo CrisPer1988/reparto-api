@@ -24,6 +24,10 @@ const relations = () => {
   Product.hasMany(Price, { foreignKey: "product_id" });
   Price.belongsTo(Product, { foreignKey: "product_id" });
 
+  //product => price
+  Price.hasMany(Order_Details, { foreignKey: "price_id" });
+  Order_Details.belongsTo(Price, { foreignKey: "price_id" });
+
   //product => productDetails
   Product.hasMany(ProductDetails, { foreignKey: "product_id" });
   ProductDetails.belongsTo(Product, { foreignKey: "product_id" });
