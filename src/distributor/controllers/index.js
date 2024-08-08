@@ -1,14 +1,8 @@
-const Super_Admin = require("../model");
 const bcrypt = require("bcryptjs");
-const generateJWT = require("../../utils/jwt");
 const Admin = require("../../admin/model/admin.model");
-const Seller = require("../../sellers/model/sellers.model");
-const Delivery_man = require("../../delivery_man/model/delivery_man.model");
 const { createFunction } = require("../../utils/create.function");
 const { uploadImage } = require("../../utils/uploadImage");
-const Product = require("../../products/model");
 const Distributor = require("../model");
-const Owner = require("../../owner/model");
 const { loginFunction } = require("../../utils/loginFunction");
 
 exports.createDistributor = async (req, res) => {
@@ -106,22 +100,29 @@ exports.createAdmin = async (req, res) => {
   }
 };
 
-// exports.createDeliveryMan = async (req, res) => {
-//   try {
-//     const { superAdmin } = req;
-//     const delevery = await createFunction(
-//       req.body,
-//       Delivery_man,
-//       superAdmin.id
-//     );
+exports.changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword } = req.body;
 
-//     return res.status(201).json({
-//       status: "Success",
-//       delevery,
-//     });
-//   } catch (error) {
-//     res.json({
-//       message: error,
-//     });
-//   }
-// };
+  const distributor = await Distributor.findOne({
+    where: {
+      id,
+    },
+  });
+
+  if (!distributor) {
+    return res.status(404).json({ message: "Distributor not found" });
+  }
+
+  if (await bcrypt.compare(oldPassword, distributor.password)) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await distributor.update({ password: hashedPassword });
+  } else {
+    return res.status(404).json({ message: "Invalid password" });
+  }
+  console.log(id);
+
+  return res.status(200).json({
+    message: "Password updated",
+  });
+};

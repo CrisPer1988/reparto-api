@@ -69,7 +69,8 @@ router
   .get(
     validations.validExistsDistributor,
     distributorController.findDistributor
-  );
+  )
+  .patch(distributorController.changePassword);
 
 // Ruta para crear un admin con validaciones
 router
