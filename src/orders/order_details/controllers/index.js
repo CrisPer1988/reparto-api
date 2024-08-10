@@ -23,7 +23,8 @@ exports.createOrderDetails = async (req, res) => {
     const applicableBonuses = [];
 
     for (const detail of details) {
-      const { product_id, price_id, quantity, product_detail_id } = detail;
+      const { product_id, price_id, quantity, product_detail_id, unit } =
+        detail;
 
       const product = await Product.findOne({
         where: { id: product_id },
@@ -54,6 +55,7 @@ exports.createOrderDetails = async (req, res) => {
           message: `Stock insuficiente de: ${productDetails.flavor}, solo quedan: ${productDetails.stock}`,
         });
       }
+      console.log("ENTER CREATEEEEEEE");
 
       const orderDetail = await Order_Details.create({
         product_id,
@@ -63,6 +65,7 @@ exports.createOrderDetails = async (req, res) => {
         order_id: order.id,
         total_price: price.price * quantity,
       });
+      console.log("DESPUESSS CREATEEEEEEE");
 
       const productName = product.name;
 
@@ -72,17 +75,19 @@ exports.createOrderDetails = async (req, res) => {
         bonification[productName] = quantity;
       }
 
-      // const bonus = await Bonus.findOne({
-      //   where: {
-      //     product_id: product.id,
-      //     quantity: {
-      //       [Op.lte]: bonification[productName],
-      //     },
-      //   },
-      //   include: [{ model: Product, as: "BonusProduct" }],
-      // });
+      let newStock;
 
-      const newStock = productDetails.stock - quantity;
+      console.log("UNITTTTTTTTT", unit);
+
+      if (unit === "pack") {
+        newStock = productDetails.stock - quantity;
+      } else {
+        newStock =
+          (productDetails.stock * product.pack - quantity) / product.pack;
+      }
+
+      // const newStock = productDetails.stock - quantity;
+
       await productDetails.update({ stock: newStock });
 
       const bonuses = await Bonus.findAll({

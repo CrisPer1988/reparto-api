@@ -13,7 +13,7 @@ const ProductDetails = db.define("productsDetails", {
     allowNull: false,
   },
   stock: {
-    type: DataTypes.STRING,
+    type: DataTypes.DECIMAL(10, 1),
     allowNull: false,
   },
   image: {
