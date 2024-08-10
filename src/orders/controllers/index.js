@@ -299,6 +299,7 @@ exports.completedOrder = async (req, res) => {
 exports.rejectedOrder = async (req, res) => {
   try {
     const { order } = req;
+    console.log("ENTREEEEEEEEE", order.bonusOrders[0].bonus);
 
     let details = order.orders_details;
 
@@ -310,13 +311,25 @@ exports.rejectedOrder = async (req, res) => {
 
       if (productDetail) {
         productDetail.stock =
-          parseInt(productDetail.stock, 10) + detail.quantity;
+          parseFloat(productDetail.stock) + parseFloat(detail.quantity);
 
-        const productPackSize = detail.product.pack;
-        for (let bonus of productDetail.bonuses) {
-          const bonusPacks =
-            parseInt(bonus.bonus_quantity, 10) / productPackSize;
-          productDetail.stock += bonusPacks;
+        // const productPackSize = detail.product.pack;
+        for (let bonus of order?.bonusOrders) {
+          // console.log("BONUSUSUSUSUSUS", bonus);
+          const productDetailBonus = await ProductDetails.findOne({
+            where: { id: bonus.bonus.product_detail_bonus_id },
+            include: [{ model: Product }],
+          });
+          console.log("ENCONTREEEEEEEEEEEE", productDetailBonus);
+
+          const newStock =
+            bonus.bonus.bonus_quantity / productDetailBonus.product.pack +
+            parseFloat(productDetailBonus.stock);
+          // productDetailBonus.stock += bonusPacks;
+
+          await productDetailBonus.update({ stock: newStock });
+
+          // await productDetailBonus.save();
         }
 
         await productDetail.save();

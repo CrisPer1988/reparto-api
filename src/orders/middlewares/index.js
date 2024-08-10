@@ -1,3 +1,5 @@
+const BonusOrder = require("../../products/bonus/bonusOrder/model");
+const Bonus = require("../../products/bonus/model");
 const Product = require("../../products/model");
 const ProductDetails = require("../../products/productDetails/model");
 const Order = require("../model");
@@ -22,6 +24,7 @@ exports.validExistsOrder = async (req, res, next) => {
             { model: ProductDetails },
           ],
         },
+        { model: BonusOrder, include: [{ model: Bonus }] },
       ],
     });
 

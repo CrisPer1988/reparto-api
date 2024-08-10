@@ -16,7 +16,7 @@ router
 
 router
   .route("/:id/rejected")
-  .get(validationsOrder.validExistsOrder, controllers.rejectedOrder);
+  .post(validationsOrder.validExistsOrder, controllers.rejectedOrder);
 
 router
   .route("/:id")

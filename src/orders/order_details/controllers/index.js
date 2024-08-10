@@ -110,7 +110,8 @@ exports.createOrderDetails = async (req, res) => {
           include: [{ model: Product }],
         });
         const newStock =
-          (productDetailBonus.stock * productDetailBonus.product.pack -
+          (parseFloat(productDetailBonus.stock) *
+            productDetailBonus.product.pack -
             bonus.bonus_quantity) /
           productDetailBonus.product.pack;
 
