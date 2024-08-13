@@ -1,7 +1,8 @@
 const express = require("express");
 
 const controller = require("../controllers");
-const zonesValidatios = require("../../zone/middlewares");
+const zonesValidation = require("../../zone/middlewares");
+const commerceValidatios = require("../middlewares");
 
 const router = express.Router();
 
@@ -9,6 +10,8 @@ router.route("/").post(controller.createCommerce).get(controller.allCommerces);
 
 router
   .route("/:id")
-  .get(zonesValidatios.validExistsZone, controller.allCommercesByZone);
+  .get(zonesValidation.validExistsZone, controller.allCommercesByZone)
+  .put(commerceValidatios.validExistsCommerce, controller.updatedCommerce)
+  .delete(commerceValidatios.validExistsCommerce, controller.deleteCommerce);
 
 module.exports = router;

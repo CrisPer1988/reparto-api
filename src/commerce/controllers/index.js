@@ -83,3 +83,46 @@ exports.allCommercesByZone = async (req, res) => {
     });
   }
 };
+
+exports.updatedCommerce = async (req, res) => {
+  try {
+    const { commerce } = req;
+    const { name, address, phone, zone_id } = req.body;
+
+    await commerce.update({
+      name: name || commerce.name,
+      address: address || commerce.address,
+      phone: phone || commerce.phone,
+      zone_id: zone_id || commerce.zone_id,
+    });
+
+    return res.status(201).json({
+      status: "Success",
+      // commerces,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteCommerce = async (req, res) => {
+  try {
+    const { commerce } = req;
+
+    await commerce.update({
+      status: "disabled",
+    });
+
+    return res.status(201).json({
+      status: "Success",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
