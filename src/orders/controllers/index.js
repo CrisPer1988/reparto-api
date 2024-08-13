@@ -296,40 +296,117 @@ exports.completedOrder = async (req, res) => {
   }
 };
 
+// exports.rejectedOrder = async (req, res) => {
+//   try {
+//     const { order } = req;
+//     console.log("ENTREEEEEEEEE", order.bonusOrders[0].bonus);
+
+//     let details = order.orders_details;
+
+//     for (let detail of details) {
+//       const productDetail = await ProductDetails.findOne({
+//         where: { id: detail.productsDetail.id },
+//         include: [{ model: Bonus }],
+//       });
+
+//       if (productDetail) {
+//         productDetail.stock =
+//           parseFloat(productDetail.stock) + parseFloat(detail.quantity);
+
+//         if (order?.bonusOrders && order.bonusOrders.length > 0) {
+//           for (let bonus of order.bonusOrders) {
+//             const productDetailBonus = await ProductDetails.findOne({
+//               where: { id: bonus.bonus.product_detail_bonus_id },
+//               include: [{ model: Product }],
+//             });
+
+//             if (productDetailBonus) {
+//               const newStock =
+//                 bonus.bonus.bonus_quantity / productDetailBonus.product.pack +
+//                 parseFloat(productDetailBonus.stock);
+
+//               await productDetailBonus.update({ stock: newStock });
+//             }
+//           }
+//         }
+
+//         await productDetail.save();
+//       }
+//     }
+
+//     await order.update({ status: "rejected" });
+
+//     return res.status(200).json({
+//       message: "Order rejected and stock updated",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       status: "Error",
+//       message: "Something went wrong",
+//     });
+//   }
+// };
+
 exports.rejectedOrder = async (req, res) => {
   try {
     const { order } = req;
-    console.log("ENTREEEEEEEEE", order.bonusOrders[0].bonus);
+
+    // Asegúrate de que order.bonusOrders esté definido y no sea nulo
+    if (!order || !order.orders_details) {
+      return res.status(400).json({ message: "Invalid order details" });
+    }
 
     let details = order.orders_details;
 
     for (let detail of details) {
       const productDetail = await ProductDetails.findOne({
         where: { id: detail.productsDetail.id },
-        include: [{ model: Bonus }],
+        include: [{ model: Bonus }, { model: Product }],
       });
 
+      const price = await Price.findOne({
+        where: { id: detail.price_id, status: "active" },
+      });
+
+      // console.log("PRODUCTTTTTTTTTT", productDetail.product);
+
+      // let newStock;
+
       if (productDetail) {
-        productDetail.stock =
-          parseFloat(productDetail.stock) + parseFloat(detail.quantity);
+        // productDetail.stock =
+        //   parseFloat(productDetail.stock) + parseFloat(detail.quantity);
 
-        // const productPackSize = detail.product.pack;
-        for (let bonus of order?.bonusOrders) {
-          // console.log("BONUSUSUSUSUSUS", bonus);
-          const productDetailBonus = await ProductDetails.findOne({
-            where: { id: bonus.bonus.product_detail_bonus_id },
-            include: [{ model: Product }],
-          });
-          console.log("ENCONTREEEEEEEEEEEE", productDetailBonus);
+        if (detail.total_price === price.price * detail.quantity) {
+          productDetail.stock =
+            parseFloat(productDetail.stock) + parseFloat(detail.quantity);
+        } else {
+          productDetail.stock = (
+            (parseFloat(productDetail.stock) * productDetail.product.pack -
+              detail.quantity) /
+            productDetail.product.pack
+          ).toFixed(2);
+        }
 
-          const newStock =
-            bonus.bonus.bonus_quantity / productDetailBonus.product.pack +
-            parseFloat(productDetailBonus.stock);
-          // productDetailBonus.stock += bonusPacks;
+        // Verifica si hay bonus antes de intentar acceder a ellos
+        if (order.bonusOrders && Array.isArray(order.bonusOrders)) {
+          for (let bonus of order.bonusOrders) {
+            // Verifica si bonus.bonus está definido
+            if (bonus.bonus) {
+              const productDetailBonus = await ProductDetails.findOne({
+                where: { id: bonus.bonus.product_detail_bonus_id },
+                include: [{ model: Product }],
+              });
 
-          await productDetailBonus.update({ stock: newStock });
+              if (productDetailBonus) {
+                const newStock =
+                  bonus.bonus.bonus_quantity / productDetailBonus.product.pack +
+                  parseFloat(productDetailBonus.stock);
 
-          // await productDetailBonus.save();
+                await productDetailBonus.update({ stock: newStock });
+              }
+            }
+          }
         }
 
         await productDetail.save();

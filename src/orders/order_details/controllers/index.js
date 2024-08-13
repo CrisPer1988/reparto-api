@@ -1,11 +1,10 @@
 // const Category = require("../../../products/category/model");
 const Product = require("../../../products/model");
 const Price = require("../../../products/price/model");
-const Order = require("../../model");
 const Order_Details = require("../model");
 const Bonus = require("../../../products/bonus/model");
 
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 const ProductDetails = require("../../../products/productDetails/model");
 const BonusOrder = require("../../../products/bonus/bonusOrder/model");
 
@@ -17,6 +16,8 @@ exports.createOrderDetails = async (req, res) => {
     if (!details || !Array.isArray(details)) {
       return res.status(400).json({ message: "Invalid details format" });
     }
+
+    console.log(details);
 
     const orderDetails = [];
     const bonification = {};
@@ -55,7 +56,13 @@ exports.createOrderDetails = async (req, res) => {
           message: `Stock insuficiente de: ${productDetails.flavor}, solo quedan: ${productDetails.stock}`,
         });
       }
-      console.log("ENTER CREATEEEEEEE");
+
+      let totalPrice;
+      if (unit === "pack") {
+        totalPrice = price.price * quantity;
+      } else {
+        totalPrice = (price.price / product.pack) * quantity;
+      }
 
       const orderDetail = await Order_Details.create({
         product_id,
@@ -63,10 +70,8 @@ exports.createOrderDetails = async (req, res) => {
         product_detail_id,
         quantity,
         order_id: order.id,
-        total_price: price.price * quantity,
+        total_price: totalPrice,
       });
-      console.log("DESPUESSS CREATEEEEEEE");
-
       const productName = product.name;
 
       if (bonification[productName]) {
@@ -77,16 +82,12 @@ exports.createOrderDetails = async (req, res) => {
 
       let newStock;
 
-      console.log("UNITTTTTTTTT", unit);
-
       if (unit === "pack") {
         newStock = productDetails.stock - quantity;
       } else {
         newStock =
           (productDetails.stock * product.pack - quantity) / product.pack;
       }
-
-      // const newStock = productDetails.stock - quantity;
 
       await productDetails.update({ stock: newStock });
 
