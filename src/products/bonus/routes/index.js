@@ -1,15 +1,13 @@
 const express = require("express");
 
-const bonusControllers = require("../controllers");
-// const categoryValidations = require("../../category_product/middlewares");
-
+const controllers = require("../controllers");
+const bonusValidations = require("../middlewares");
 const router = express.Router();
 
+router.route("/").post(controllers.createBonus).get(controllers.allBunuses);
+
 router
-  .route("/")
-  .post(
-    /*categoryValidations.validExistsCategory,*/ bonusControllers.createBonus
-  )
-  .get(bonusControllers.allBunuses);
+  .route("/:id")
+  .delete(bonusValidations.validExistBonus, controllers.deleteBonus);
 
 module.exports = router;

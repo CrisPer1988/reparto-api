@@ -35,6 +35,7 @@ exports.createBonus = async (req, res) => {
 exports.allBunuses = async (req, res) => {
   try {
     const bonuses = await Bonus.findAll({
+      where: { status: "active" },
       include: [
         { model: Product, as: "Product" },
         {
@@ -55,4 +56,15 @@ exports.allBunuses = async (req, res) => {
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
+};
+
+exports.deleteBonus = async (req, res) => {
+  const { bonus } = req;
+
+  await bonus.update({ status: "disabled" });
+
+  return res.status(200).json({
+    status: "Success",
+    // bonus,
+  });
 };
