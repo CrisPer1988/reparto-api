@@ -93,6 +93,7 @@ exports.createOrderDetails = async (req, res) => {
 
       const bonuses = await Bonus.findAll({
         where: {
+          status: "active",
           product_id: product.id,
           quantity: {
             [Op.lte]: bonification[productName],
