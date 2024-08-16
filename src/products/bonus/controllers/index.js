@@ -58,6 +58,21 @@ exports.allBunuses = async (req, res) => {
   }
 };
 
+exports.updatedBonus = async (req, res) => {
+  const { bonus } = req;
+  const { quantity, product_detail_bonus_id } = req.body;
+
+  await bonus.update({
+    quantity: quantity || bonus.quantity,
+    product_detail_bonus_id:
+      product_detail_bonus_id || bonus.product_detail_bonus_id,
+  });
+
+  return res.status(200).json({
+    status: "Success",
+  });
+};
+
 exports.deleteBonus = async (req, res) => {
   const { bonus } = req;
 
@@ -65,6 +80,5 @@ exports.deleteBonus = async (req, res) => {
 
   return res.status(200).json({
     status: "Success",
-    // bonus,
   });
 };

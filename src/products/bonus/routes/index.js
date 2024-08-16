@@ -8,6 +8,7 @@ router.route("/").post(controllers.createBonus).get(controllers.allBunuses);
 
 router
   .route("/:id")
-  .delete(bonusValidations.validExistBonus, controllers.deleteBonus);
+  .delete(bonusValidations.validExistBonus, controllers.deleteBonus)
+  .patch(bonusValidations.validExistBonus, controllers.updatedBonus);
 
 module.exports = router;
