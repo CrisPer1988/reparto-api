@@ -382,9 +382,10 @@ exports.rejectedOrder = async (req, res) => {
             parseFloat(productDetail.stock) + parseFloat(detail.quantity);
         } else {
           productDetail.stock = (
-            (parseFloat(productDetail.stock) * productDetail.product.pack +
-              detail.quantity) /
-            productDetail.product.pack
+            (parseFloat(productDetail.stock) *
+              parseFloat(productDetail.product.pack) +
+              parseFloat(detail.quantity)) /
+            parseFloat(productDetail.product.pack)
           ).toFixed(2);
         }
 
