@@ -296,58 +296,6 @@ exports.completedOrder = async (req, res) => {
   }
 };
 
-// exports.rejectedOrder = async (req, res) => {
-//   try {
-//     const { order } = req;
-//     console.log("ENTREEEEEEEEE", order.bonusOrders[0].bonus);
-
-//     let details = order.orders_details;
-
-//     for (let detail of details) {
-//       const productDetail = await ProductDetails.findOne({
-//         where: { id: detail.productsDetail.id },
-//         include: [{ model: Bonus }],
-//       });
-
-//       if (productDetail) {
-//         productDetail.stock =
-//           parseFloat(productDetail.stock) + parseFloat(detail.quantity);
-
-//         if (order?.bonusOrders && order.bonusOrders.length > 0) {
-//           for (let bonus of order.bonusOrders) {
-//             const productDetailBonus = await ProductDetails.findOne({
-//               where: { id: bonus.bonus.product_detail_bonus_id },
-//               include: [{ model: Product }],
-//             });
-
-//             if (productDetailBonus) {
-//               const newStock =
-//                 bonus.bonus.bonus_quantity / productDetailBonus.product.pack +
-//                 parseFloat(productDetailBonus.stock);
-
-//               await productDetailBonus.update({ stock: newStock });
-//             }
-//           }
-//         }
-
-//         await productDetail.save();
-//       }
-//     }
-
-//     await order.update({ status: "rejected" });
-
-//     return res.status(200).json({
-//       message: "Order rejected and stock updated",
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       status: "Error",
-//       message: "Something went wrong",
-//     });
-//   }
-// };
-
 exports.rejectedOrder = async (req, res) => {
   try {
     const { order } = req;
@@ -369,14 +317,7 @@ exports.rejectedOrder = async (req, res) => {
         where: { id: detail.price_id, status: "active" },
       });
 
-      // console.log("PRODUCTTTTTTTTTT", productDetail.product);
-
-      // let newStock;
-
       if (productDetail) {
-        // productDetail.stock =
-        //   parseFloat(productDetail.stock) + parseFloat(detail.quantity);
-
         if (detail.total_price === price.price * detail.quantity) {
           productDetail.stock =
             parseFloat(productDetail.stock) + parseFloat(detail.quantity);
@@ -389,10 +330,8 @@ exports.rejectedOrder = async (req, res) => {
           ).toFixed(2);
         }
 
-        // Verifica si hay bonus antes de intentar acceder a ellos
         if (order.bonusOrders && Array.isArray(order.bonusOrders)) {
           for (let bonus of order.bonusOrders) {
-            // Verifica si bonus.bonus está definido
             if (bonus.bonus) {
               const productDetailBonus = await ProductDetails.findOne({
                 where: { id: bonus.bonus.product_detail_bonus_id },
