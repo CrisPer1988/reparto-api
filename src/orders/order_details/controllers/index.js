@@ -156,6 +156,7 @@ exports.createOrderDetails = async (req, res) => {
     const orderDetails = [];
     const bonification = {};
     const applicableBonuses = {};
+    let getPrice;
 
     for (const detail of details) {
       const { product_id, price_id, quantity, product_detail_id, unit } =
@@ -177,6 +178,7 @@ exports.createOrderDetails = async (req, res) => {
       });
 
       const price = await Price.findOne({ where: { id: price_id } });
+      getPrice = price;
 
       if (!price) {
         return res
@@ -215,8 +217,6 @@ exports.createOrderDetails = async (req, res) => {
         bonification[productName] = { totalQuantity: quantity, product_id };
       }
 
-      console.log("BONI BONI", bonification);
-
       let newStock;
 
       if (unit === "pack") {
@@ -253,37 +253,39 @@ exports.createOrderDetails = async (req, res) => {
         include: [{ model: Product, as: "BonusProduct" }],
         order: [["quantity", "DESC"]],
       });
+      console.log("priceeeeeeeeee", getPrice);
+      if (bonuses && getPrice.name === "Normal") {
+        for (const bonus of bonuses) {
+          const applicableBonusCount = Math.floor(
+            remainingBonusQuantity / bonus.quantity
+          );
 
-      for (const bonus of bonuses) {
-        const applicableBonusCount = Math.floor(
-          remainingBonusQuantity / bonus.quantity
-        );
+          for (let i = 0; i < applicableBonusCount; i++) {
+            const productDetailBonus = await ProductDetails.findOne({
+              where: { id: bonus.product_detail_bonus_id },
+              include: [{ model: Product }],
+            });
 
-        for (let i = 0; i < applicableBonusCount; i++) {
-          const productDetailBonus = await ProductDetails.findOne({
-            where: { id: bonus.product_detail_bonus_id },
-            include: [{ model: Product }],
-          });
+            const newBonusStock =
+              (parseFloat(productDetailBonus.stock) *
+                productDetailBonus.product.pack -
+                bonus.bonus_quantity) /
+              productDetailBonus.product.pack;
 
-          const newBonusStock =
-            (parseFloat(productDetailBonus.stock) *
-              productDetailBonus.product.pack -
-              bonus.bonus_quantity) /
-            productDetailBonus.product.pack;
+            await productDetailBonus.update({ stock: newBonusStock });
 
-          await productDetailBonus.update({ stock: newBonusStock });
+            if (!applicableBonuses[productName]) {
+              applicableBonuses[productName] = [];
+            }
+            applicableBonuses[productName].push(bonus);
 
-          if (!applicableBonuses[productName]) {
-            applicableBonuses[productName] = [];
+            await BonusOrder.create({
+              order_id: order.id,
+              bonus_id: bonus.id,
+            });
+
+            remainingBonusQuantity -= bonus.quantity;
           }
-          applicableBonuses[productName].push(bonus);
-
-          await BonusOrder.create({
-            order_id: order.id,
-            bonus_id: bonus.id,
-          });
-
-          remainingBonusQuantity -= bonus.quantity;
         }
       }
     }
