@@ -130,6 +130,7 @@ exports.allOrdersByZone = async (req, res) => {
             },
           ],
         },
+        { model: Zone },
       ],
     });
 
