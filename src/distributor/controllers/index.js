@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs");
-const Admin = require("../../admin/model/admin.model");
 const { createFunction } = require("../../utils/create.function");
 const { uploadImage } = require("../../utils/uploadImage");
 const Distributor = require("../model");

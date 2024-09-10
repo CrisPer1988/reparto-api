@@ -1,13 +1,9 @@
-// const Admin = require("../admin/model/admin.model");
 const Seller = require("../sellers/model/sellers.model");
-const Delivery_man = require("../delivery_man/model/delivery_man.model");
 const Product = require("../products/model");
 const Distributor = require("../distributor/model");
 const Owner = require("../owner/model");
-// const Category_Product = require("../products/type/model");
 const Price = require("../products/price/model");
 const Bonus = require("../products/bonus/model");
-// const Category = require("../products/category/model");
 const Order_Details = require("../orders/order_details/model");
 const Order = require("../orders/model");
 const Commerce = require("../commerce/model");

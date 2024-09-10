@@ -12,7 +12,7 @@ db.authenticate()
 
 relations();
 
-db.sync()
+db.sync({ force: true })
   .then(() => console.log("database Sync"))
   .catch((err) => console.log(err));
 
