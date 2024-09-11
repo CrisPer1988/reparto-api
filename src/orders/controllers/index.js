@@ -297,11 +297,92 @@ exports.completedOrder = async (req, res) => {
   }
 };
 
+// exports.rejectedOrder = async (req, res) => {
+//   try {
+//     const { order } = req;
+
+//     // Asegúrate de que order.bonusOrders esté definido y no sea nulo
+//     if (!order || !order.orders_details) {
+//       return res.status(400).json({ message: "Invalid order details" });
+//     }
+
+//     let details = order.orders_details;
+
+//     for (let detail of details) {
+//       const productDetail = await ProductDetails.findOne({
+//         where: { id: detail.productsDetail.id },
+//         include: [{ model: Bonus }, { model: Product }],
+//       });
+
+//       const price = await Price.findOne({
+//         where: { id: detail.price_id, status: "active" },
+//       });
+
+//       if (productDetail) {
+//         if (detail.total_price === price.price * detail.quantity) {
+//           productDetail.stock =
+//             parseFloat(productDetail.stock) + parseFloat(detail.quantity);
+//           console.log("DETAIL QUANTITY", detail.quantity);
+//           console.log("actualSTAOCKKK", productDetail.stock);
+//         } else {
+//           productDetail.stock = (
+//             (parseFloat(productDetail.stock) *
+//               parseFloat(productDetail.product.pack) +
+//               parseFloat(detail.quantity)) /
+//             parseFloat(productDetail.product.pack)
+//           ).toFixed(2);
+//         }
+
+//         if (order.bonusOrders && Array.isArray(order.bonusOrders)) {
+//           for (let bonus of order.bonusOrders) {
+//             if (bonus.bonus) {
+//               const productDetailBonus = await ProductDetails.findOne({
+//                 where: { id: bonus.bonus.product_detail_bonus_id },
+//                 include: [{ model: Product }],
+//               });
+
+//               if (productDetailBonus) {
+//                 productDetailBonus.stock = parseFloat(
+//                   (
+//                     parseFloat(bonus.bonus.bonus_quantity) /
+//                       parseFloat(productDetailBonus.product.pack) +
+//                     parseFloat(productDetailBonus.stock)
+//                   ).toFixed(2)
+//                 );
+
+//                 console.log("DETAIL BONUSSSSS", productDetailBonus);
+
+//                 // await productDetailBonus.update({ stock: newStock });
+//               }
+//               await productDetailBonus.save();
+//             }
+//           }
+//         }
+
+//         console.log("DETAILLLLLLL", productDetail.stock);
+
+//         await productDetail.save();
+//       }
+//     }
+
+//     await order.update({ status: "rejected" });
+
+//     return res.status(200).json({
+//       message: "Order rejected and stock updated",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       status: "Error",
+//       message: "Something went wrong",
+//     });
+//   }
+// };
+
 exports.rejectedOrder = async (req, res) => {
   try {
     const { order } = req;
 
-    // Asegúrate de que order.bonusOrders esté definido y no sea nulo
     if (!order || !order.orders_details) {
       return res.status(400).json({ message: "Invalid order details" });
     }
@@ -332,21 +413,47 @@ exports.rejectedOrder = async (req, res) => {
         }
 
         if (order.bonusOrders && Array.isArray(order.bonusOrders)) {
+          // Inicializa la cantidad de bonificación total
+          let totalBonusQuantity = 0;
+
           for (let bonus of order.bonusOrders) {
             if (bonus.bonus) {
-              const productDetailBonus = await ProductDetails.findOne({
-                where: { id: bonus.bonus.product_detail_bonus_id },
-                include: [{ model: Product }],
-              });
+              if (bonus.bonus.product_detail_bonus_id === productDetail.id) {
+                // Acumula la cantidad de bonificación si es el mismo producto
+                totalBonusQuantity += parseFloat(bonus.bonus.bonus_quantity);
+                console.log("totalBonusQuantityasasaasa", totalBonusQuantity);
+              } else {
+                // Si es un producto distinto, actualiza ese producto
+                const productDetailBonus = await ProductDetails.findOne({
+                  where: { id: bonus.bonus.product_detail_bonus_id },
+                  include: [{ model: Product }],
+                });
 
-              if (productDetailBonus) {
-                const newStock =
-                  bonus.bonus.bonus_quantity / productDetailBonus.product.pack +
-                  parseFloat(productDetailBonus.stock);
+                if (productDetailBonus) {
+                  productDetailBonus.stock = parseFloat(
+                    (
+                      parseFloat(bonus.bonus.bonus_quantity) /
+                        parseFloat(productDetailBonus.product.pack) +
+                      parseFloat(productDetailBonus.stock)
+                    ).toFixed(2)
+                  );
 
-                await productDetailBonus.update({ stock: newStock });
+                  console.log("DETAIL BONUS UPDATED", productDetailBonus.stock);
+                  await productDetailBonus.save();
+                }
               }
             }
+          }
+
+          // Si se encontraron bonificaciones para el mismo producto, actualiza el stock de una vez
+          if (totalBonusQuantity > 0) {
+            productDetail.stock =
+              parseFloat(productDetail.stock) +
+              totalBonusQuantity / parseFloat(productDetail.product.pack);
+            console.log(
+              "SAME PRODUCT: Updated stock with total bonus",
+              productDetail.stock
+            );
           }
         }
 

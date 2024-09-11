@@ -289,11 +289,15 @@ exports.createOrderDetails = async (req, res) => {
               include: [{ model: Product }],
             });
 
+            console.log("ACTULA BONUSPRODUCT", productDetailBonus.stock);
+
             const newBonusStock =
               (parseFloat(productDetailBonus.stock) *
                 productDetailBonus.product.pack -
                 bonus.bonus_quantity) /
               productDetailBonus.product.pack;
+
+            console.log("ACTULA BONUSPRODUCT", newBonusStock);
 
             await productDetailBonus.update({ stock: newBonusStock });
 
@@ -312,7 +316,7 @@ exports.createOrderDetails = async (req, res) => {
         }
       }
     }
-
+    console.log("quantitytytytytt", bonification);
     return res.status(201).json({ orderDetails, applicableBonuses });
   } catch (error) {
     res
