@@ -420,14 +420,21 @@ exports.rejectedOrder = async (req, res) => {
             if (bonus.bonus) {
               if (bonus.bonus.product_detail_bonus_id === productDetail.id) {
                 // Acumula la cantidad de bonificación si es el mismo producto
+                console.log("MISMO PRODUCTOOOOOOOO", productDetail.flavor);
+
                 totalBonusQuantity += parseFloat(bonus.bonus.bonus_quantity);
-                console.log("totalBonusQuantityasasaasa", totalBonusQuantity);
               } else {
                 // Si es un producto distinto, actualiza ese producto
+
                 const productDetailBonus = await ProductDetails.findOne({
                   where: { id: bonus.bonus.product_detail_bonus_id },
                   include: [{ model: Product }],
                 });
+                console.log(
+                  "Distintoooooo PRODUCTOOOOOOOO",
+                  productDetailBonus.flavor
+                );
+                console.log("totalBonusQuantityasasaasa", totalBonusQuantity);
 
                 if (productDetailBonus) {
                   productDetailBonus.stock = parseFloat(
@@ -450,10 +457,6 @@ exports.rejectedOrder = async (req, res) => {
             productDetail.stock =
               parseFloat(productDetail.stock) +
               totalBonusQuantity / parseFloat(productDetail.product.pack);
-            console.log(
-              "SAME PRODUCT: Updated stock with total bonus",
-              productDetail.stock
-            );
           }
         }
 
