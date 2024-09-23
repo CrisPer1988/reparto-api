@@ -2,8 +2,8 @@ const Product = require("../model");
 
 exports.validExistsProduct = async (req, res, next) => {
   try {
-    console.log("ENTREEEEEE");
     const { id } = req.params;
+    console.log("IDDDDDDD", id);
 
     const product = await Product.findOne({
       where: {
